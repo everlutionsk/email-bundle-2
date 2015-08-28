@@ -1,0 +1,4 @@
+services:
+    everlution.email.mailer:
+        class: Everlution\EmailBundle\Mailer
+        arguments: []
