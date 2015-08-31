@@ -15,4 +15,9 @@ interface ReplyableMessage
      */
     public function getReferences();
 
+    /**
+     * @return string
+     */
+    public function getSubject();
+
 }

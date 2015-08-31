@@ -1,14 +1,17 @@
 <?php
 
-namespace Everlution\EmailBundle\Message\Outcoming;
+namespace Everlution\EmailBundle\Message\Inbound;
 
 use Everlution\EmailBundle\Attachment\Attachment;
 use Everlution\EmailBundle\Header;
+use Everlution\EmailBundle\Message\ReplyableMessage;
 use Everlution\EmailBundle\Recipient\Recipient;
-use Everlution\EmailBundle\Template\Template;
 
-class OutcomingMessage
+class InboundMessage implements ReplyableMessage
 {
+
+    /** @var string */
+    protected $messageId;
 
     /** @var string */
     protected $fromName;
@@ -23,16 +26,16 @@ class OutcomingMessage
     protected $subject;
 
     /** @var Recipient[] */
-    protected $recipients;
+    protected $recipients = [];
 
     /** @var Header[] */
-    protected $customHeaders;
+    protected $headers = [];
 
     /** @var Attachment[] */
-    protected $attachments;
+    protected $attachments = [];
 
     /** @var Attachment[] */
-    protected $images;
+    protected $images = [];
 
     /** @var string */
     protected $text;
@@ -40,15 +43,30 @@ class OutcomingMessage
     /** @var string */
     protected $html;
 
-    /** @var Template */
-    protected $template;
-
     /** @var string */
     protected $inReplyTo;
 
     /** @var string */
     protected $references;
 
+    /** @var string */
+    protected $mailSystemMessageId;
+
+    /**
+     * @return string
+     */
+    public function getMessageId()
+    {
+        return $this->messageId;
+    }
+
+    /**
+     * @param string $messageId
+     */
+    public function setMessageId($messageId)
+    {
+        $this->messageId = $messageId;
+    }
 
     /**
      * @return string
@@ -125,7 +143,7 @@ class OutcomingMessage
     /**
      * @param Recipient[] $recipients
      */
-    public function setRecipients($recipients)
+    public function setRecipients(array $recipients)
     {
         $this->recipients = $recipients;
     }
@@ -133,17 +151,17 @@ class OutcomingMessage
     /**
      * @return Header[]
      */
-    public function getCustomHeaders()
+    public function getHeaders()
     {
-        return $this->customHeaders;
+        return $this->headers;
     }
 
     /**
-     * @param Header[] $customHeaders
+     * @param Header[] $headers
      */
-    public function setCustomHeaders($customHeaders)
+    public function setHeaders(array $headers)
     {
-        $this->customHeaders = $customHeaders;
+        $this->headers = $headers;
     }
 
     /**
@@ -155,9 +173,9 @@ class OutcomingMessage
     }
 
     /**
-     * @param Attachment $attachments
+     * @param Attachment[] $attachments
      */
-    public function setAttachments($attachments)
+    public function setAttachments(array $attachments)
     {
         $this->attachments = $attachments;
     }
@@ -171,9 +189,9 @@ class OutcomingMessage
     }
 
     /**
-     * @param Attachment $images
+     * @param Attachment[] $images
      */
-    public function setImages($images)
+    public function setImages(array $images)
     {
         $this->images = $images;
     }
@@ -211,22 +229,6 @@ class OutcomingMessage
     }
 
     /**
-     * @return Template
-     */
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    /**
-     * @param Template $template
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
-    }
-
-    /**
      * @return string
      */
     public function getInReplyTo()
@@ -256,6 +258,22 @@ class OutcomingMessage
     public function setReferences($references)
     {
         $this->references = $references;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMailSystemMessageId()
+    {
+        return $this->mailSystemMessageId;
+    }
+
+    /**
+     * @param string $mailSystemMessageId
+     */
+    public function setMailSystemMessageId($mailSystemMessageId)
+    {
+        $this->mailSystemMessageId = $mailSystemMessageId;
     }
 
 }

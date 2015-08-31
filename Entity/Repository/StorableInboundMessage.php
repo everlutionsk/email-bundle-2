@@ -3,9 +3,9 @@
 namespace Everlution\EmailBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Everlution\EmailBundle\Entity\StorableOutcomingMessage as Entity;
+use Everlution\EmailBundle\Entity\StorableInboundMessage as Entity;
 
-class StorableOutcomingMessage extends EntityRepository
+class StorableInboundMessage extends EntityRepository
 {
     /**
      * @param string $messageId

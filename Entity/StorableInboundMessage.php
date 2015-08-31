@@ -3,15 +3,17 @@
 namespace Everlution\EmailBundle\Entity;
 
 use DateTime;
+use Doctrine\ORM\Mapping as ORM;
 use Everlution\EmailBundle\Header;
+use Everlution\EmailBundle\Message\Inbound\InboundMessage;
 use Everlution\EmailBundle\Message\ReplyableMessage;
 use Everlution\EmailBundle\Recipient\Recipient;
 
 /**
- * @ORM\Entity()
- * @ORM\Table(name="email_incoming", repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableIncomingMessage", indexes={@ORM\Index(name="message_idx", columns={"message_id"})})
+ * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableInboundMessage")
+ * @ORM\Table(name="email_inbound", indexes={@ORM\Index(name="message_idx", columns={"message_id"})})
  */
-class StorableIncomingMessage implements ReplyableMessage
+class StorableInboundMessage implements ReplyableMessage
 {
 
     /**
@@ -99,11 +101,50 @@ class StorableIncomingMessage implements ReplyableMessage
     protected $headers;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="mail_system", type="string", length=255, nullable=false)
+     */
+    protected $mailSystem;
+
+    /**
+     * Message identifier within the mail system.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="message_mail_system_id", type="string", length=255, nullable=false)
+     */
+    protected $mailSystemMessageId;
+
+    /**
      * @var DateTime
      *
      * @ORM\Column(name="delivered_at", type="datetime", nullable=false)
      */
     protected $deliveredAt;
+
+    /**
+     * @param InboundMessage $message
+     * @param string $mailSystemName
+     */
+    public function __construct(InboundMessage $message, $mailSystemName)
+    {
+        $this->messageId = $message->getMessageId();
+        $this->inReplyTo = $message->getInReplyTo();
+        $this->references = $message->getReferences();
+        $this->recipients = $message->getRecipients();
+        $this->replyTo = $message->getReplyTo();
+        $this->fromEmail = $message->getFromEmail();
+        $this->fromName = $message->getFromName();
+        $this->html = $message->getHtml();
+        $this->text = $message->getText();
+        $this->subject = $message->getSubject();
+        $this->headers = $message->getHeaders();
+        $this->mailSystemMessageId = $message->getMailSystemMessageId();
+
+        $this->mailSystem = $mailSystemName;
+        $this->deliveredAt = new DateTime('now');
+    }
 
     /**
      * @return mixed
@@ -123,7 +164,7 @@ class StorableIncomingMessage implements ReplyableMessage
 
     /**
      * @param string $messageId
-     * @return StorableIncomingMessage
+     * @return StorableInboundMessage
      */
     public function setMessageId($messageId)
     {
@@ -142,7 +183,7 @@ class StorableIncomingMessage implements ReplyableMessage
 
     /**
      * @param string $inReplyTo
-     * @return StorableIncomingMessage
+     * @return StorableInboundMessage
      */
     public function setInReplyTo($inReplyTo)
     {
@@ -161,7 +202,7 @@ class StorableIncomingMessage implements ReplyableMessage
 
     /**
      * @param string $references
-     * @return StorableIncomingMessage
+     * @return StorableInboundMessage
      */
     public function setReferences($references)
     {
@@ -180,7 +221,7 @@ class StorableIncomingMessage implements ReplyableMessage
 
     /**
      * @param Recipient[] $recipients
-     * @return StorableIncomingMessage
+     * @return StorableInboundMessage
      */
     public function setRecipients($recipients)
     {
@@ -199,7 +240,7 @@ class StorableIncomingMessage implements ReplyableMessage
 
     /**
      * @param string $replyTo
-     * @return StorableIncomingMessage
+     * @return StorableInboundMessage
      */
     public function setReplyTo($replyTo)
     {
@@ -218,7 +259,7 @@ class StorableIncomingMessage implements ReplyableMessage
 
     /**
      * @param string $fromEmail
-     * @return StorableIncomingMessage
+     * @return StorableInboundMessage
      */
     public function setFromEmail($fromEmail)
     {
@@ -237,7 +278,7 @@ class StorableIncomingMessage implements ReplyableMessage
 
     /**
      * @param string $fromName
-     * @return StorableIncomingMessage
+     * @return StorableInboundMessage
      */
     public function setFromName($fromName)
     {
@@ -256,7 +297,7 @@ class StorableIncomingMessage implements ReplyableMessage
 
     /**
      * @param string $html
-     * @return StorableIncomingMessage
+     * @return StorableInboundMessage
      */
     public function setHtml($html)
     {
@@ -275,7 +316,7 @@ class StorableIncomingMessage implements ReplyableMessage
 
     /**
      * @param string $text
-     * @return StorableIncomingMessage
+     * @return StorableInboundMessage
      */
     public function setText($text)
     {
@@ -294,7 +335,7 @@ class StorableIncomingMessage implements ReplyableMessage
 
     /**
      * @param string $subject
-     * @return StorableIncomingMessage
+     * @return StorableInboundMessage
      */
     public function setSubject($subject)
     {
@@ -313,13 +354,48 @@ class StorableIncomingMessage implements ReplyableMessage
 
     /**
      * @param Header[] $headers
-     * @return StorableIncomingMessage
+     * @return StorableInboundMessage
      */
     public function setHeaders($headers)
     {
         $this->headers = $headers;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMailSystem()
+    {
+        return $this->mailSystem;
+    }
+
+    /**
+     * @param string $mailSystem
+     * @return StorableOutboundMessage
+     */
+    public function setMailSystem($mailSystem)
+    {
+        $this->mailSystem = $mailSystem;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMailSystemMessageId()
+    {
+        return $this->mailSystemMessageId;
+    }
+
+    /**
+     * @param string $mailSystemMessageId
+     */
+    public function setMailSystemMessageId($mailSystemMessageId)
+    {
+        $this->mailSystemMessageId = $mailSystemMessageId;
     }
 
     /**
@@ -332,7 +408,7 @@ class StorableIncomingMessage implements ReplyableMessage
 
     /**
      * @param DateTime $deliveredAt
-     * @return StorableIncomingMessage
+     * @return StorableInboundMessage
      */
     public function setDeliveredAt($deliveredAt)
     {

@@ -2,21 +2,21 @@
 
 namespace Everlution\EmailBundle\Outbound\Mailer;
 
+use Everlution\EmailBundle\Attachment\Attachment;
 use Everlution\EmailBundle\Attachment\AttachmentLocator;
-use Everlution\EmailBundle\Entity\StorableOutcomingMessage;
-use Everlution\EmailBundle\Message\Outcoming\IdentifiableOutcomingMessage;
+use Everlution\EmailBundle\Entity\StorableOutboundMessage;
+use Everlution\EmailBundle\Message\Outbound\IdentifiableOutboundMessage;
 use Everlution\EmailBundle\Outbound\MailSystem;
-use Everlution\EmailBundle\Message\Outcoming\OutcomingMessage;
-use Everlution\EmailBundle\Message\Outcoming\ProcessedOutcomingMessage;
-use Everlution\EmailBundle\Entity\Repository\StorableOutcomingMessage as StorableMessageRepository;
+use Everlution\EmailBundle\Message\Outbound\OutboundMessage;
+use Everlution\EmailBundle\Message\Outbound\ProcessedOutboundMessage;
+use Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage as StorableMessageRepository;
 use Everlution\EmailBundle\Support\MessageId\Generator as MessageIdGenerator;
-
-use Everlution\EmailBundle\Transformer\OutcomingMessageTransformer;
+use Everlution\EmailBundle\Transformer\OutboundMessageTransformer;
 
 abstract class Mailer implements MailerInterface
 {
 
-    /** @var OutcomingMessageTransformer[] */
+    /** @var OutboundMessageTransformer[] */
     protected $messageTransformers = [];
 
     /** @var MessageIdGenerator */
@@ -32,7 +32,6 @@ abstract class Mailer implements MailerInterface
     protected $attachmentLocator;
 
     /**
-     * Mailer constructor.
      * @param MessageIdGenerator $messageIdGenerator
      * @param MailSystem $mailSystem
      * @param StorableMessageRepository $storableMessageRepository
@@ -47,67 +46,66 @@ abstract class Mailer implements MailerInterface
     }
 
     /**
-     * @param OutcomingMessageTransformer[] $transformers
+     * @param OutboundMessageTransformer $transformer
      */
-    public function setMessageTransformers(array $transformers)
+    public function addMessageTransformer(OutboundMessageTransformer $transformer)
     {
-        $this->messageTransformers = $transformers;
+        $this->messageTransformers[] = $transformer;
     }
 
     /**
-     * @param OutcomingMessage $message
-     * @return ProcessedOutcomingMessage
+     * @param OutboundMessage $message
+     * @return ProcessedOutboundMessage
      */
-    protected function processMessage(OutcomingMessage $message)
+    protected function processMessage(OutboundMessage $message)
     {
-        $message = $this->transformMessage($message);
+        $this->transformMessage($message);
 
         $identifiableMessage = $this->convertToIdentifiableMessage($message);
-        $storableMessage = new StorableOutcomingMessage($identifiableMessage, $this->mailSystem->getMailSystemName());
+        $storableMessage = new StorableOutboundMessage($identifiableMessage, $this->mailSystem->getMailSystemName());
 
-        return new ProcessedOutcomingMessage($identifiableMessage, $storableMessage);
+        return new ProcessedOutboundMessage($identifiableMessage, $storableMessage);
     }
 
     /**
-     * @param OutcomingMessage $message
-     * @return OutcomingMessage
+     * @param OutboundMessage $message
      */
-    protected function transformMessage(OutcomingMessage $message)
+    protected function transformMessage(OutboundMessage $message)
     {
         foreach ($this->messageTransformers as $transformer) {
-            $message = $transformer->transform($message);
+            $transformer->transform($message);
         }
-
-        return $message;
     }
 
     /**
-     * @param OutcomingMessage $message
-     * @return IdentifiableOutcomingMessage
+     * @param OutboundMessage $message
+     * @return IdentifiableOutboundMessage
      */
-    protected function convertToIdentifiableMessage(OutcomingMessage $message)
+    protected function convertToIdentifiableMessage(OutboundMessage $message)
     {
         $newMessageId = $this->messageIdGenerator->generate();
 
-        return new IdentifiableOutcomingMessage($newMessageId, $message);
+        return new IdentifiableOutboundMessage($newMessageId, $message);
     }
 
     /**
-     * @param ProcessedOutcomingMessage $processedMessage
+     * @param ProcessedOutboundMessage $processedMessage
      */
-    protected function storeProcessedMessage(ProcessedOutcomingMessage $processedMessage)
+    protected function storeProcessedMessage(ProcessedOutboundMessage $processedMessage)
     {
         $this->storableMessageRepository->save($processedMessage->getStorableMessage());
-        $this->storeAttachments($processedMessage);
+
+        $attachments = $processedMessage->getIdentifiableOutboundMessage()->getMessage()->getAttachments();
+        $this->storeAttachments($attachments, $processedMessage->getStorableMessage());
     }
 
     /**
-     * @param ProcessedOutcomingMessage $processedMessage
+     * @param Attachment[] $attachments
+     * @param StorableOutboundMessage $storableMessage
      */
-    protected function storeAttachments(ProcessedOutcomingMessage $processedMessage)
+    protected function storeAttachments(array $attachments, StorableOutboundMessage $storableMessage)
     {
-        $attachments = $processedMessage->getIdentifiableOutcomingMessage()->getMessage()->getAttachments();
-        $this->attachmentLocator->saveAttachments($attachments, $processedMessage->getStorableMessage()->getId());
+        $this->attachmentLocator->saveAttachments($attachments, $storableMessage->getId());
     }
 
 }

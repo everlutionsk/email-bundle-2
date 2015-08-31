@@ -4,11 +4,11 @@ namespace Everlution\EmailBundle\Outbound\Mailer;
 
 use DateTime;
 use Everlution\EmailBundle\Attachment\AttachmentLocator;
-use Everlution\EmailBundle\Message\Outcoming\OutcomingMessage;
-use Everlution\EmailBundle\Message\Outcoming\ProcessedOutcomingMessage as ProcessedMessage;
+use Everlution\EmailBundle\Message\Outbound\OutboundMessage;
+use Everlution\EmailBundle\Message\Outbound\ProcessedOutboundMessage as ProcessedMessage;
 use Everlution\EmailBundle\Outbound\MailSystem;
 use Everlution\EmailBundle\Support\Stream\Stream;
-use Everlution\EmailBundle\Entity\Repository\StorableOutcomingMessage as StorableMessageRepository;
+use Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage as StorableMessageRepository;
 use Everlution\EmailBundle\Support\MessageId\Generator as MessageIdGenerator;
 
 class AsynchronousMailer extends SynchronousMailer
@@ -65,10 +65,10 @@ class AsynchronousMailer extends SynchronousMailer
     }
 
     /**
-     * @param OutcomingMessage $message
+     * @param OutboundMessage $message
      * @return ProcessedMessage
      */
-    public function sendMessage(OutcomingMessage $message)
+    public function sendMessage(OutboundMessage $message)
     {
         $processedMessage = $this->processMessage($message);
 
@@ -78,11 +78,11 @@ class AsynchronousMailer extends SynchronousMailer
     }
 
     /**
-     * @param OutcomingMessage $message
+     * @param OutboundMessage $message
      * @param DateTime $sendAt
      * @return ProcessedMessage
      */
-    public function scheduleMessage(OutcomingMessage $message, DateTime $sendAt)
+    public function scheduleMessage(OutboundMessage $message, DateTime $sendAt)
     {
         $processedMessage = $this->processMessage($message);
 

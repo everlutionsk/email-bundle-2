@@ -2,7 +2,7 @@
 
 namespace Everlution\EmailBundle\Doctrine\Type;
 
-class StorableOutcomingMessageStatus extends Enum
+class StorableOutboundMessageStatus extends Enum
 {
 
     const FRESH = 'fresh';
@@ -28,7 +28,7 @@ class StorableOutcomingMessageStatus extends Enum
      */
     public function getName()
     {
-        return 'storableOutcomingMessageStatus';
+        return 'storableOutboundMessageStatus';
     }
 
 }

@@ -3,19 +3,20 @@
 namespace Everlution\EmailBundle\Outbound\Mailer;
 
 use DateTime;
-use Everlution\EmailBundle\Doctrine\Type\StorableOutcomingMessageStatus;
-use Everlution\EmailBundle\Message\Outcoming\OutcomingMessage;
-use Everlution\EmailBundle\Message\Outcoming\ProcessedOutcomingMessage as ProcessedMessage;
+use Everlution\EmailBundle\Doctrine\Type\StorableOutboundMessageStatus;
+use Everlution\EmailBundle\Message\Outbound\OutboundMessage;
+use Everlution\EmailBundle\Message\Outbound\ProcessedOutboundMessage;
 use Everlution\EmailBundle\Outbound\MailSystemException;
+use Everlution\EmailBundle\Outbound\MailSystemResult;
 
 class SynchronousMailer extends Mailer
 {
 
     /**
-     * @param OutcomingMessage $message
-     * @return ProcessedMessage
+     * @param OutboundMessage $message
+     * @return ProcessedOutboundMessage
      */
-    public function sendMessage(OutcomingMessage $message)
+    public function sendMessage(OutboundMessage $message)
     {
         $processedMessage = $this->processMessage($message);
 
@@ -26,25 +27,24 @@ class SynchronousMailer extends Mailer
     }
 
     /**
-     * @param ProcessedMessage $processedMessage
+     * @param ProcessedOutboundMessage $processedMessage
      */
-    protected function sendProcessedMessage(ProcessedMessage $processedMessage)
+    protected function sendProcessedMessage(ProcessedOutboundMessage $processedMessage)
     {
         try {
-            $this->mailSystem->sendMessage($processedMessage->getIdentifiableOutcomingMessage());
-            $processedMessage->getStorableMessage()->setStatus(StorableOutcomingMessageStatus::SENT);
-            $processedMessage->getStorableMessage()->setSentAt(new DateTime('now'));
-        } catch (MailSystemException $e) {
+            $result = $this->mailSystem->sendMessage($processedMessage->getIdentifiableOutboundMessage());
+            $this->handleMailSystemResult($result, $processedMessage);
+         } catch (MailSystemException $e) {
             $this->handleMailSystemException($e, $processedMessage);
         }
     }
 
     /**
-     * @param OutcomingMessage $message
+     * @param OutboundMessage $message
      * @param DateTime $sendAt
-     * @return ProcessedMessage
+     * @return ProcessedOutboundMessage
      */
-    public function scheduleMessage(OutcomingMessage $message, DateTime $sendAt)
+    public function scheduleMessage(OutboundMessage $message, DateTime $sendAt)
     {
         $processedMessage = $this->processMessage($message);
 
@@ -55,26 +55,37 @@ class SynchronousMailer extends Mailer
     }
 
     /**
-     * @param ProcessedMessage $processedMessage
+     * @param ProcessedOutboundMessage $processedMessage
      * @param DateTime $sendAt
      */
-    protected function scheduleProcessedMessage(ProcessedMessage $processedMessage, DateTime $sendAt)
+    protected function scheduleProcessedMessage(ProcessedOutboundMessage $processedMessage, DateTime $sendAt)
     {
         try {
-            $this->mailSystem->scheduleMessage($processedMessage->getIdentifiableOutcomingMessage(), $sendAt);
-            $processedMessage->getStorableMessage()->setStatus(StorableOutcomingMessageStatus::SCHEDULED);
+            $result = $this->mailSystem->scheduleMessage($processedMessage->getIdentifiableOutboundMessage(), $sendAt);
+            $this->handleMailSystemResult($result, $processedMessage);
         } catch (MailSystemException $e) {
             $this->handleMailSystemException($e, $processedMessage);
         }
     }
 
     /**
-     * @param MailSystemException $exception
-     * @param ProcessedMessage $processedMessage
+     * @param MailSystemResult $result
+     * @param ProcessedOutboundMessage $processedMessage
      */
-    protected function handleMailSystemException(MailSystemException $exception, ProcessedMessage $processedMessage)
+    protected function handleMailSystemResult(MailSystemResult $result, ProcessedOutboundMessage $processedMessage)
     {
-        $processedMessage->getStorableMessage()->setStatus(StorableOutcomingMessageStatus::FAILED);
+        $processedMessage->getStorableMessage()->setStatus($result->getMessageStatus());
+        $processedMessage->getStorableMessage()->setSentAt($result->getSentAt());
+        $processedMessage->getStorableMessage()->setMailSystemMessageId($result->getMailSystemMessageId());
+    }
+
+    /**
+     * @param MailSystemException $exception
+     * @param ProcessedOutboundMessage $processedMessage
+     */
+    protected function handleMailSystemException(MailSystemException $exception, ProcessedOutboundMessage $processedMessage)
+    {
+        $processedMessage->getStorableMessage()->setStatus(StorableOutboundMessageStatus::FAILED);
         $processedMessage->getStorableMessage()->setError($exception->getMessage());
     }
 

@@ -12,6 +12,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
+
     /**
      * Generates the configuration tree builder.
      *
@@ -24,12 +25,29 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('domain_name')
+                    ->isRequired()
+                    ->info('Domain name.')
+                ->end()
+                ->scalarNode('mail_system')
+                    ->isRequired()
+                    ->info('Instance of Outbound\MailSystem interface.')
+                ->end()
+                ->scalarNode('attachment_locator')
+                    ->isRequired()
+                    ->info('Instance of Attachment\AttachmentLocator interface.')
+                ->end()
                 ->scalarNode('async_stream')
+                    ->isRequired()
+                    ->info('Async handling launcher. Must be instance of Support\Stream\Stream!')
+                ->end()
+                ->scalarNode('message_id_generator')
                     ->defaultValue(null)
-                    ->info('Async handling launcher. Must be instance of Stream!')
+                    ->info('Instance of Support\MessageId\Generator interface.')
                 ->end()
             ->end();
 
         return $treeBuilder;
     }
+
 }

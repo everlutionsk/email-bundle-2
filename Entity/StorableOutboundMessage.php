@@ -4,18 +4,21 @@ namespace Everlution\EmailBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Everlution\EmailBundle\Doctrine\Type\StorableOutcomingMessageStatus;
+use Everlution\EmailBundle\Doctrine\Type\StorableOutboundMessageStatus;
 use Everlution\EmailBundle\Header;
-use Everlution\EmailBundle\Message\Outcoming\IdentifiableOutcomingMessage;
+use Everlution\EmailBundle\Message\Outbound\IdentifiableOutboundMessage;
 use Everlution\EmailBundle\Message\ReplyableMessage;
 use Everlution\EmailBundle\Recipient\Recipient;
 use Everlution\EmailBundle\Template\Template;
 
 /**
- * @ORM\Entity()
- * @ORM\Table(name="email_outcoming", repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableOutcomingMessage", indexes={@ORM\Index(name="message_idx", columns={"message_id"})})
+ * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage")
+ * @ORM\Table(name="email_outbound", indexes={
+ *          @ORM\Index(name="message_idx", columns={"message_id"}),
+ *          @ORM\Index(name="message_search", columns={"mail_system_message_id", "mail_system"})
+ *      })
  */
-class StorableOutcomingMessage implements ReplyableMessage
+class StorableOutboundMessage implements ReplyableMessage
 {
 
     /**
@@ -42,7 +45,7 @@ class StorableOutcomingMessage implements ReplyableMessage
     /**
      * @var string
      *
-     * @ORM\Column(name="references", type="string", nullable=true)
+     * @ORM\Column(name="parents", type="string", nullable=true)
      */
     protected $references;
 
@@ -111,7 +114,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @var string
-     * @ORM\Column(type="storableOutcomingMessageStatus", nullable=false)
+     * @ORM\Column(type="storableOutboundMessageStatus", nullable=false)
      */
     protected $status;
 
@@ -144,6 +147,15 @@ class StorableOutcomingMessage implements ReplyableMessage
     protected $mailSystem;
 
     /**
+     * Message identifier within the mail system.
+     *
+     * @var string
+     *
+     * @ORM\Column(name="mail_system_message_id", type="string", length=255, nullable=false)
+     */
+    protected $mailSystemMessageId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="error", type="string", length=512, nullable=true)
@@ -151,10 +163,10 @@ class StorableOutcomingMessage implements ReplyableMessage
     protected $error;
 
     /**
-     * @param IdentifiableOutcomingMessage $identifiableMessage
+     * @param IdentifiableOutboundMessage $identifiableMessage
      * @param string $mailSystemName
      */
-    public function __construct(IdentifiableOutcomingMessage $identifiableMessage, $mailSystemName)
+    public function __construct(IdentifiableOutboundMessage $identifiableMessage, $mailSystemName)
     {
         $message = $identifiableMessage->getMessage();
 
@@ -171,7 +183,7 @@ class StorableOutcomingMessage implements ReplyableMessage
         $this->subject = $message->getSubject();
         $this->customHeaders = $message->getCustomHeaders();
 
-        $this->status = StorableOutcomingMessageStatus::FRESH;
+        $this->status = StorableOutboundMessageStatus::FRESH;
         $this->createdAt = new DateTime('now');
         $this->mailSystem = $mailSystemName;
     }
@@ -195,7 +207,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param string $messageId
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setMessageId($messageId)
     {
@@ -214,7 +226,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param string $inReplyTo
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setInReplyTo($inReplyTo)
     {
@@ -233,7 +245,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param string $references
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setReferences($references)
     {
@@ -252,7 +264,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param Recipient[] $recipients
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setRecipients(array $recipients)
     {
@@ -271,7 +283,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param string $replyTo
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setReplyTo($replyTo)
     {
@@ -290,7 +302,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param string $fromEmail
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setFromEmail($fromEmail)
     {
@@ -309,7 +321,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param string $fromName
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setFromName($fromName)
     {
@@ -328,7 +340,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param string $html
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setHtml($html)
     {
@@ -347,7 +359,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param string $text
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setText($text)
     {
@@ -366,7 +378,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param Template $template
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setTemplateContent(Template $template = null)
     {
@@ -385,7 +397,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param string $subject
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setSubject($subject)
     {
@@ -404,7 +416,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param Header[] $customHeaders
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setCustomHeaders(array $customHeaders = null)
     {
@@ -423,7 +435,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param string $status
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setStatus($status)
     {
@@ -442,7 +454,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param DateTime $createdAt
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setCreatedAt(DateTime $createdAt = null)
     {
@@ -461,7 +473,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param DateTime $scheduledSendTime
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setScheduledSendTime(DateTime $scheduledSendTime = null)
     {
@@ -480,7 +492,7 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param DateTime $sentAt
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setSentAt(DateTime $sentAt = null)
     {
@@ -499,13 +511,29 @@ class StorableOutcomingMessage implements ReplyableMessage
 
     /**
      * @param string $mailSystem
-     * @return StorableOutcomingMessage
+     * @return StorableOutboundMessage
      */
     public function setMailSystem($mailSystem)
     {
         $this->mailSystem = $mailSystem;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMailSystemMessageId()
+    {
+        return $this->mailSystemMessageId;
+    }
+
+    /**
+     * @param string $mailSystemMessageId
+     */
+    public function setMailSystemMessageId($mailSystemMessageId)
+    {
+        $this->mailSystemMessageId = $mailSystemMessageId;
     }
 
     /**

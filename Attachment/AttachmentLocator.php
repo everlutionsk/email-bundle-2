@@ -6,15 +6,15 @@ interface AttachmentLocator
 {
 
     /**
-     * @param mixed $messageIdentifier
+     * @param mixed $storableMessageIdentifier
      * @return Attachment
      */
-    public function findAttachments($messageIdentifier);
+    public function findAttachments($storableMessageIdentifier);
 
     /**
      * @param Attachment[] $attachments
-     * @param mixed $messageIdentifier
+     * @param mixed $storableMessageIdentifier
      */
-    public function saveAttachments(array $attachments, $messageIdentifier);
+    public function saveAttachments(array $attachments, $storableMessageIdentifier);
 
 }

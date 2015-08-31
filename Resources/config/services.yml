@@ -1,4 +1,47 @@
 services:
-    everlution.email.mailer:
-        class: Everlution\EmailBundle\Mailer
-        arguments: []
+
+    everlution.email.reply_manager:
+        class: Everlution\EmailBundle\Support\ReplyManager
+
+
+    #OUTBOUND
+
+    everlution.email.outbound.synchronous_mailer:
+        class: Everlution\EmailBundle\Outbound\Mailer\SynchronousMailer
+        arguments:
+            - @everlution.email.message_id_generator
+            - @everlution.email.mail_system
+            - @everlution.email.outbound.repository
+            - @everlution.email.attachment_locator
+
+    everlution.email.outbound.asynchronous_mailer:
+        class: Everlution\EmailBundle\Outbound\Mailer\AsynchronousMailer
+        arguments:
+            - @everlution.email.async_stream
+            - @everlution.email.message_id_generator
+            - @everlution.email.mail_system
+            - @everlution.email.outbound.repository
+            - @everlution.email.attachment_locator
+
+    everlution.email.outbound.repository:
+        class: Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments:
+            - Everlution\EmailBundle\Entity\StorableOutboundMessage
+
+
+    #INBOUND
+
+    everlution.email.inbound.message_processor:
+        class: Everlution\EmailBundle\Inbound\InboundMessageProcessor
+        arguments:
+            - @everlution.email.inbound.repository
+            - @everlution.email.attachment_locator
+
+    everlution.email.inbound.repository:
+        class: Everlution\EmailBundle\Entity\Repository\StorableInboundMessage
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments:
+            - Everlution\EmailBundle\Entity\StorableInboundMessage
