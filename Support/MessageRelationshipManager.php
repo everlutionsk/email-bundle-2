@@ -5,7 +5,7 @@ namespace Everlution\EmailBundle\Support;
 use Everlution\EmailBundle\Message\Outbound\OutboundMessage;
 use Everlution\EmailBundle\Message\ReplyableMessage;
 
-class ReplyManager
+class MessageRelationshipManager
 {
 
     const SUBJECT_PREFIX = 'Re: ';
@@ -14,7 +14,7 @@ class ReplyManager
      * @param OutboundMessage $message
      * @param ReplyableMessage $parentMessage
      */
-    public function convertToReply(OutboundMessage $message, ReplyableMessage $parentMessage)
+    public function transformToReplyMessage(OutboundMessage $message, ReplyableMessage $parentMessage)
     {
         $references = $parentMessage->getReferences() . ' ' . $parentMessage->getMessageId();
 

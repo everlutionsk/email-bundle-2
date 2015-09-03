@@ -9,7 +9,7 @@ use Everlution\EmailBundle\Entity\Repository\StorableInboundMessage as StorableM
 use Everlution\EmailBundle\Message\Inbound\InboundMessage;
 use Everlution\EmailBundle\Transformer\InboundMessageTransformer;
 
-class InboundMessageProcessor implements InboundMessageProcessorInterface
+class MessageProcessor
 {
 
     /** @var InboundMessageTransformer[] */
@@ -41,13 +41,12 @@ class InboundMessageProcessor implements InboundMessageProcessorInterface
 
     /**
      * @param InboundMessage $message
-     * @param string $mailSystemName
      */
-    public function storeInboundMessage(InboundMessage $message, $mailSystemName)
+    public function storeInboundMessage(InboundMessage $message)
     {
         $this->transformMessage($message);
 
-        $storableMessage = new StorableInboundMessage($message, $mailSystemName);
+        $storableMessage = new StorableInboundMessage($message);
 
         $this->storeStorableMessage($storableMessage);
         $this->storeAttachments($message->getAttachments(), $storableMessage);

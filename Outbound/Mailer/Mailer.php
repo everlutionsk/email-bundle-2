@@ -6,7 +6,7 @@ use Everlution\EmailBundle\Attachment\Attachment;
 use Everlution\EmailBundle\Attachment\AttachmentLocator;
 use Everlution\EmailBundle\Entity\StorableOutboundMessage;
 use Everlution\EmailBundle\Message\Outbound\IdentifiableOutboundMessage;
-use Everlution\EmailBundle\Outbound\MailSystem;
+use Everlution\EmailBundle\Outbound\MailSystem\MailSystem;
 use Everlution\EmailBundle\Message\Outbound\OutboundMessage;
 use Everlution\EmailBundle\Message\Outbound\ProcessedOutboundMessage;
 use Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage as StorableMessageRepository;

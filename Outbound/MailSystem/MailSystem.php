@@ -1,6 +1,6 @@
 <?php
 
-namespace Everlution\EmailBundle\Outbound;
+namespace Everlution\EmailBundle\Outbound\MailSystem;
 
 use DateTime;
 use Everlution\EmailBundle\Message\Outbound\IdentifiableOutboundMessage;

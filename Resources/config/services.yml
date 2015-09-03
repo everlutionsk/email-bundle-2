@@ -1,7 +1,7 @@
 services:
 
-    everlution.email.reply_manager:
-        class: Everlution\EmailBundle\Support\ReplyManager
+    everlution.email.message_relationship_manager:
+        class: Everlution\EmailBundle\Support\MessageRelationshipManager
 
 
     #OUTBOUND
@@ -9,37 +9,66 @@ services:
     everlution.email.outbound.synchronous_mailer:
         class: Everlution\EmailBundle\Outbound\Mailer\SynchronousMailer
         arguments:
-            - @everlution.email.message_id_generator
-            - @everlution.email.mail_system
-            - @everlution.email.outbound.repository
-            - @everlution.email.attachment_locator
+            - @everlution.email.ext.message_id_generator
+            - @everlution.email.ext.mail_system
+            - @everlution.email.outbound.message_repository
+            - @everlution.email.ext.attachment_locator
 
     everlution.email.outbound.asynchronous_mailer:
         class: Everlution\EmailBundle\Outbound\Mailer\AsynchronousMailer
         arguments:
-            - @everlution.email.async_stream
-            - @everlution.email.message_id_generator
-            - @everlution.email.mail_system
-            - @everlution.email.outbound.repository
-            - @everlution.email.attachment_locator
+            - @everlution.email.ext.async_stream
+            - @everlution.email.ext.message_id_generator
+            - @everlution.email.ext.mail_system
+            - @everlution.email.outbound.message_repository
+            - @everlution.email.ext.attachment_locator
 
-    everlution.email.outbound.repository:
+    everlution.email.outbound.message_event.controller:
+        class: Everlution\EmailBundle\Controller\MessageEventController
+        arguments:
+            - @everlution.email.ext.outbound.message_event.request_processor
+            - @everlution.email.outbound.message_event.processor
+
+    everlution.email.outbound.message_event.processor:
+        class: Everlution\EmailBundle\Outbound\MessageEvent\MessageEventProcessor
+        arguments:
+            - @everlution.email.outbound.message_info_repository
+
+    everlution.email.outbound.message_repository:
         class: Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage
         factory_service: doctrine.orm.default_entity_manager
         factory_method: getRepository
         arguments:
             - Everlution\EmailBundle\Entity\StorableOutboundMessage
 
+    everlution.email.outbound.message_info_repository:
+        class: Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageInfo
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments:
+            - Everlution\EmailBundle\Entity\StorableOutboundMessageInfo
+
+    everlution.email.stream.kernel_terminate:
+        class: Everlution\EmailBundle\Support\Stream\BroadcastStream
+        tags:
+            - {name: kernel.event_listener, event: kernel.terminate, method: add}
+
 
     #INBOUND
 
-    everlution.email.inbound.message_processor:
-        class: Everlution\EmailBundle\Inbound\InboundMessageProcessor
+    everlution.email.inbound.controller:
+        class: Everlution\EmailBundle\Controller\InboundController
         arguments:
-            - @everlution.email.inbound.repository
-            - @everlution.email.attachment_locator
+            - @everlution.email.ext.inbound.request_processor
+            - @everlution.email.inbound.message_processor
 
-    everlution.email.inbound.repository:
+    everlution.email.inbound.message_processor:
+        class: Everlution\EmailBundle\Inbound\MessageProcessor
+        arguments:
+            - @everlution.email.inbound.message_repository
+            - @everlution.email.ext.attachment_locator
+
+    everlution.email.inbound.message_repository:
         class: Everlution\EmailBundle\Entity\Repository\StorableInboundMessage
         factory_service: doctrine.orm.default_entity_manager
         factory_method: getRepository

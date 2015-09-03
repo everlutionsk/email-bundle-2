@@ -26,7 +26,7 @@ class StorableInboundMessage implements ReplyableMessage
     /**
      * @var string
      *
-     * @ORM\Column(name="message_id", type="string", length=255, nullable=false)
+     * @ORM\Column(name="message_id", type="string", length=255, nullable=false, unique=true)
      */
     protected $messageId;
 
@@ -40,7 +40,7 @@ class StorableInboundMessage implements ReplyableMessage
     /**
      * @var string
      *
-     * @ORM\Column(name="references", type="string", nullable=true)
+     * @ORM\Column(name="parents", type="string", nullable=true)
      */
     protected $references;
 
@@ -101,22 +101,6 @@ class StorableInboundMessage implements ReplyableMessage
     protected $headers;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="mail_system", type="string", length=255, nullable=false)
-     */
-    protected $mailSystem;
-
-    /**
-     * Message identifier within the mail system.
-     *
-     * @var string
-     *
-     * @ORM\Column(name="message_mail_system_id", type="string", length=255, nullable=false)
-     */
-    protected $mailSystemMessageId;
-
-    /**
      * @var DateTime
      *
      * @ORM\Column(name="delivered_at", type="datetime", nullable=false)
@@ -125,9 +109,8 @@ class StorableInboundMessage implements ReplyableMessage
 
     /**
      * @param InboundMessage $message
-     * @param string $mailSystemName
      */
-    public function __construct(InboundMessage $message, $mailSystemName)
+    public function __construct(InboundMessage $message)
     {
         $this->messageId = $message->getMessageId();
         $this->inReplyTo = $message->getInReplyTo();
@@ -140,9 +123,7 @@ class StorableInboundMessage implements ReplyableMessage
         $this->text = $message->getText();
         $this->subject = $message->getSubject();
         $this->headers = $message->getHeaders();
-        $this->mailSystemMessageId = $message->getMailSystemMessageId();
 
-        $this->mailSystem = $mailSystemName;
         $this->deliveredAt = new DateTime('now');
     }
 
@@ -361,41 +342,6 @@ class StorableInboundMessage implements ReplyableMessage
         $this->headers = $headers;
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMailSystem()
-    {
-        return $this->mailSystem;
-    }
-
-    /**
-     * @param string $mailSystem
-     * @return StorableOutboundMessage
-     */
-    public function setMailSystem($mailSystem)
-    {
-        $this->mailSystem = $mailSystem;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMailSystemMessageId()
-    {
-        return $this->mailSystemMessageId;
-    }
-
-    /**
-     * @param string $mailSystemMessageId
-     */
-    public function setMailSystemMessageId($mailSystemMessageId)
-    {
-        $this->mailSystemMessageId = $mailSystemMessageId;
     }
 
     /**

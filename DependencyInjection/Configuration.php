@@ -45,6 +45,18 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue(null)
                     ->info('Instance of Support\MessageId\Generator interface.')
                 ->end()
+                ->arrayNode('request_transformers')
+                    ->children()
+                        ->scalarNode('inbound')
+                            ->isRequired()
+                            ->info('Instance of Inbound\RequestProcessor interface!.')
+                        ->end()
+                        ->scalarNode('outbound_message_event')
+                            ->isRequired()
+                            ->info('Instance of Outbound\MessageEvent\RequestProcessor interface!.')
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

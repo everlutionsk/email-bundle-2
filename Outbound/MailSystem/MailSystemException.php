@@ -1,6 +1,6 @@
 <?php
 
-namespace Everlution\EmailBundle\Outbound;
+namespace Everlution\EmailBundle\Outbound\MailSystem;
 
 class MailSystemException extends \Exception
 {

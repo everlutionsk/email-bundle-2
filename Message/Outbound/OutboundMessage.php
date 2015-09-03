@@ -1,17 +1,14 @@
 <?php
 
-namespace Everlution\EmailBundle\Message\Inbound;
+namespace Everlution\EmailBundle\Message\Outbound;
 
 use Everlution\EmailBundle\Attachment\Attachment;
 use Everlution\EmailBundle\Header;
-use Everlution\EmailBundle\Message\ReplyableMessage;
 use Everlution\EmailBundle\Recipient\Recipient;
+use Everlution\EmailBundle\Template\Template;
 
-class InboundMessage implements ReplyableMessage
+class OutboundMessage
 {
-
-    /** @var string */
-    protected $messageId;
 
     /** @var string */
     protected $fromName;
@@ -29,7 +26,7 @@ class InboundMessage implements ReplyableMessage
     protected $recipients = [];
 
     /** @var Header[] */
-    protected $headers = [];
+    protected $customHeaders = [];
 
     /** @var Attachment[] */
     protected $attachments = [];
@@ -43,27 +40,15 @@ class InboundMessage implements ReplyableMessage
     /** @var string */
     protected $html;
 
+    /** @var Template */
+    protected $template;
+
     /** @var string */
     protected $inReplyTo;
 
     /** @var string */
     protected $references;
 
-    /**
-     * @return string
-     */
-    public function getMessageId()
-    {
-        return $this->messageId;
-    }
-
-    /**
-     * @param string $messageId
-     */
-    public function setMessageId($messageId)
-    {
-        $this->messageId = $messageId;
-    }
 
     /**
      * @return string
@@ -148,17 +133,17 @@ class InboundMessage implements ReplyableMessage
     /**
      * @return Header[]
      */
-    public function getHeaders()
+    public function getCustomHeaders()
     {
-        return $this->headers;
+        return $this->customHeaders;
     }
 
     /**
-     * @param Header[] $headers
+     * @param Header[] $customHeaders
      */
-    public function setHeaders(array $headers)
+    public function setCustomHeaders(array $customHeaders)
     {
-        $this->headers = $headers;
+        $this->customHeaders = $customHeaders;
     }
 
     /**
@@ -223,6 +208,22 @@ class InboundMessage implements ReplyableMessage
     public function setHtml($html)
     {
         $this->html = $html;
+    }
+
+    /**
+     * @return Template
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param Template $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
     }
 
     /**

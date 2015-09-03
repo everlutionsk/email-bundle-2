@@ -6,11 +6,12 @@ class CcRecipient extends Recipient
 {
 
     /**
-     * @return string
+     * @param string $email
+     * @param string|null $name
      */
-    public function getType()
+    public function __construct($email, $name = null)
     {
-        return 'cc';
+        parent::__construct($email, $name, 'cc');
     }
 
 }

@@ -3,11 +3,11 @@
 namespace Everlution\EmailBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Everlution\EmailBundle\Doctrine\Type\StorableOutboundMessageStatus;
 use Everlution\EmailBundle\Header;
 use Everlution\EmailBundle\Message\Outbound\IdentifiableOutboundMessage;
-use Everlution\EmailBundle\Message\ReplyableMessage;
 use Everlution\EmailBundle\Recipient\Recipient;
 use Everlution\EmailBundle\Template\Template;
 
@@ -15,10 +15,9 @@ use Everlution\EmailBundle\Template\Template;
  * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage")
  * @ORM\Table(name="email_outbound", indexes={
  *          @ORM\Index(name="message_idx", columns={"message_id"}),
- *          @ORM\Index(name="message_search", columns={"mail_system_message_id", "mail_system"})
  *      })
  */
-class StorableOutboundMessage implements ReplyableMessage
+class StorableOutboundMessage
 {
 
     /**
@@ -31,7 +30,7 @@ class StorableOutboundMessage implements ReplyableMessage
     /**
      * @var string
      *
-     * @ORM\Column(name="message_id", type="string", length=255, nullable=false)
+     * @ORM\Column(name="message_id", type="string", length=255, nullable=false, unique=true)
      */
     protected $messageId;
 
@@ -113,12 +112,6 @@ class StorableOutboundMessage implements ReplyableMessage
     protected $customHeaders;
 
     /**
-     * @var string
-     * @ORM\Column(type="storableOutboundMessageStatus", nullable=false)
-     */
-    protected $status;
-
-    /**
      * @var DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
@@ -133,13 +126,6 @@ class StorableOutboundMessage implements ReplyableMessage
     protected $scheduledSendTime;
 
     /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="sent_at", type="datetime", nullable=true)
-     */
-    protected $sentAt;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="mail_system", type="string", length=255, nullable=false)
@@ -147,20 +133,11 @@ class StorableOutboundMessage implements ReplyableMessage
     protected $mailSystem;
 
     /**
-     * Message identifier within the mail system.
+     * @var Collection
      *
-     * @var string
-     *
-     * @ORM\Column(name="mail_system_message_id", type="string", length=255, nullable=false)
+     * @ORM\OneToMany(targetEntity="Everlution\EmailBundle\Entity\StorableOutboundMessageInfo", mappedBy="storableOutboundMessage", cascade={"persist", "remove"})
      */
-    protected $mailSystemMessageId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="error", type="string", length=512, nullable=true)
-     */
-    protected $error;
+    protected $messagesInfo;
 
     /**
      * @param IdentifiableOutboundMessage $identifiableMessage
@@ -183,9 +160,9 @@ class StorableOutboundMessage implements ReplyableMessage
         $this->subject = $message->getSubject();
         $this->customHeaders = $message->getCustomHeaders();
 
-        $this->status = StorableOutboundMessageStatus::FRESH;
-        $this->createdAt = new DateTime('now');
         $this->mailSystem = $mailSystemName;
+        $this->createdAt = new DateTime('now');
+        $this->messagesInfo = new ArrayCollection();
     }
 
 
@@ -426,25 +403,6 @@ class StorableOutboundMessage implements ReplyableMessage
     }
 
     /**
-     * @return string
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param string $status
-     * @return StorableOutboundMessage
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
      * @return DateTime
      */
     public function getCreatedAt()
@@ -483,25 +441,6 @@ class StorableOutboundMessage implements ReplyableMessage
     }
 
     /**
-     * @return DateTime
-     */
-    public function getSentAt()
-    {
-        return $this->sentAt;
-    }
-
-    /**
-     * @param DateTime $sentAt
-     * @return StorableOutboundMessage
-     */
-    public function setSentAt(DateTime $sentAt = null)
-    {
-        $this->sentAt = $sentAt;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getMailSystem()
@@ -521,35 +460,19 @@ class StorableOutboundMessage implements ReplyableMessage
     }
 
     /**
-     * @return string
+     * @param StorableOutboundMessageInfo $messageInfo
      */
-    public function getMailSystemMessageId()
+    public function addMessageInfo(StorableOutboundMessageInfo $messageInfo)
     {
-        return $this->mailSystemMessageId;
+        $this->messagesInfo->add($messageInfo);
     }
 
     /**
-     * @param string $mailSystemMessageId
+     * @param StorableOutboundMessageInfo $messageInfo
      */
-    public function setMailSystemMessageId($mailSystemMessageId)
+    public function removeMessageInfo(StorableOutboundMessageInfo $messageInfo)
     {
-        $this->mailSystemMessageId = $mailSystemMessageId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getError()
-    {
-        return $this->error;
-    }
-
-    /**
-     * @param string $error
-     */
-    public function setError($error)
-    {
-        $this->error = $error;
+        $this->messagesInfo->removeElement($messageInfo);
     }
 
 }

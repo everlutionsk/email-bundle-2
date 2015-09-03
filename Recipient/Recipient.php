@@ -2,7 +2,7 @@
 
 namespace Everlution\EmailBundle\Recipient;
 
-abstract class Recipient
+class Recipient
 {
 
     /** @var string */
@@ -11,14 +11,19 @@ abstract class Recipient
     /** @var string */
     protected $name;
 
+    /** @var string */
+    protected $type;
+
     /**
      * @param string $email
-     * @param string|null $name
+     * @param string $name
+     * @param string $type;
      */
-    public function __construct($email, $name = null)
+    public function __construct($email, $name, $type)
     {
         $this->email = $email;
         $this->name = $name;
+        $this->type = $type;
     }
 
     /**
@@ -40,6 +45,9 @@ abstract class Recipient
     /**
      * @return string
      */
-    abstract public function getType();
+    public function getType()
+    {
+        return $this->type;
+    }
 
 }

@@ -2,10 +2,9 @@
 
 namespace Everlution\EmailBundle\Entity\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Everlution\EmailBundle\Entity\StorableOutboundMessage as Entity;
 
-class StorableOutboundMessage extends EntityRepository
+class StorableOutboundMessage extends BaseRepository
 {
     /**
      * @param string $messageId
@@ -14,15 +13,6 @@ class StorableOutboundMessage extends EntityRepository
     public function findMessage($messageId)
     {
         return $this->findOneBy(['messageId' => $messageId]);
-    }
-
-    /**
-     * @param Entity $message
-     */
-    public function save(Entity $message)
-    {
-        $this->_em->persist($message);
-        $this->_em->flush($message);
     }
 
 }

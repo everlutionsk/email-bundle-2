@@ -6,11 +6,12 @@ class ToRecipient extends Recipient
 {
 
     /**
-     * @return string
+     * @param string $email
+     * @param string|null $name
      */
-    public function getType()
+    public function __construct($email, $name = null)
     {
-        return 'to';
+        parent::__construct($email, $name, 'to');
     }
 
 }

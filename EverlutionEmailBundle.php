@@ -2,7 +2,6 @@
 
 namespace Everlution\EmailBundle;
 
-use Doctrine\DBAL\Types\Type;
 use Everlution\EmailBundle\DependencyInjection\Compiler\InboundMessageProcessorCompilerPass;
 use Everlution\EmailBundle\DependencyInjection\Compiler\MailerCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -26,16 +25,4 @@ class EverlutionEmailBundle extends Bundle
         $container->addCompilerPass(new InboundMessageProcessorCompilerPass());
     }
 
-    /**
-     * Boots the Bundle.
-     */
-    public function boot()
-    {
-        $this->registerCustomDoctrineTypes();
-    }
-
-    protected function registerCustomDoctrineTypes()
-    {
-        Type::addType('storableOutboundMessageStatus', 'Everlution\EmailBundle\Doctrine\Type\StorableOutboundMessageStatus');
-    }
 }

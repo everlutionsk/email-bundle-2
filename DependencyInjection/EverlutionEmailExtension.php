@@ -39,16 +39,19 @@ class EverlutionEmailExtension extends Extension
 
     private function defineServices(ContainerBuilder $container, array $processedConfig)
     {
-        $container->setAlias('everlution.email.mail_system', $processedConfig['mail_system']);
-        $container->setAlias('everlution.email.attachment_locator', $processedConfig['attachment_locator']);
-        $container->setAlias('everlution.email.async_stream', $processedConfig['async_stream']);
+        $container->setAlias('everlution.email.ext.mail_system', $processedConfig['mail_system']);
+        $container->setAlias('everlution.email.ext.attachment_locator', $processedConfig['attachment_locator']);
+        $container->setAlias('everlution.email.ext.async_stream', $processedConfig['async_stream']);
+
+        $container->setAlias('everlution.email.ext.outbound.message_event.request_processor', $processedConfig['request_transformers']['outbound_message_event']);
+        $container->setAlias('everlution.email.ext.inbound.request_processor', $processedConfig['request_transformers']['inbound']);
 
         $this->defineMessageIdService($container, $processedConfig);
     }
 
     private function defineMessageIdService(ContainerBuilder $container, array $processedConfig)
     {
-        $serviceName = 'everlution.email.message_id_generator';
+        $serviceName = 'everlution.email.ext.message_id_generator';
 
         if (isset($processedConfig['message_id_generator'])) {
             $container->setAlias($serviceName, $processedConfig['message_id_generator']);
