@@ -2,6 +2,7 @@
 
 namespace Everlution\EmailBundle\Outbound\MessageEvent;
 
+use InvalidArgumentException;
 use Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageInfo as MessageInfoRepository;
 use Everlution\EmailBundle\Entity\StorableOutboundMessageInfo;
 
@@ -21,17 +22,19 @@ class MessageEventProcessor
 
     /**
      * @param MessageEvent $messageEvent
+     * @throws InvalidArgumentException
      */
     public function changeMessageState(MessageEvent $messageEvent)
     {
         $messageInfo = $this->findMessageInfoEntity($messageEvent);
 
         if ($messageInfo === null) {
-            throw new \InvalidArgumentException('Cannot change MessageState. Message not found!');
+            throw new InvalidArgumentException('Cannot change MessageState. Message not found!');
         }
 
         $messageInfo->setStatus($messageEvent->getStatus());
         $messageInfo->setRejectReason($messageEvent->getRejectReason());
+
         $this->messageInfoRepository->save($messageInfo);
     }
 

@@ -2,6 +2,7 @@
 
 namespace Everlution\EmailBundle;
 
+use Doctrine\DBAL\Types\Type;
 use Everlution\EmailBundle\DependencyInjection\Compiler\InboundMessageProcessorCompilerPass;
 use Everlution\EmailBundle\DependencyInjection\Compiler\MailerCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,6 +24,22 @@ class EverlutionEmailBundle extends Bundle
 
         $container->addCompilerPass(new MailerCompilerPass());
         $container->addCompilerPass(new InboundMessageProcessorCompilerPass());
+    }
+
+    /**
+     * Boots the Bundle.
+     */
+    public function boot()
+    {
+        $this->registerCustomDoctrineTypes();
+    }
+
+    protected function registerCustomDoctrineTypes()
+    {
+        Type::addType('emailRecipient', 'Everlution\EmailBundle\Doctrine\Type\RecipientType');
+        Type::addType('emailRecipients', 'Everlution\EmailBundle\Doctrine\Type\RecipientsType');
+        Type::addType('emailHeaders', 'Everlution\EmailBundle\Doctrine\Type\HeadersType');
+        Type::addType('emailTemplate', 'Everlution\EmailBundle\Doctrine\Type\TemplateType');
     }
 
 }

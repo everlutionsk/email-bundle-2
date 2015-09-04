@@ -2,14 +2,15 @@
 
 namespace Everlution\EmailBundle\Outbound\Mailer;
 
-use Everlution\EmailBundle\Attachment\Attachment;
-use Everlution\EmailBundle\Attachment\AttachmentLocator;
+use DateTime;
 use Everlution\EmailBundle\Entity\StorableOutboundMessage;
-use Everlution\EmailBundle\Message\Outbound\IdentifiableOutboundMessage;
+use Everlution\EmailBundle\Entity\StorableOutboundMessageInfo;
+use Everlution\EmailBundle\Message\Outbound\UniqueOutboundMessage;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystem;
 use Everlution\EmailBundle\Message\Outbound\OutboundMessage;
 use Everlution\EmailBundle\Message\Outbound\ProcessedOutboundMessage;
-use Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage as StorableMessageRepository;
+use Everlution\EmailBundle\Outbound\MailSystem\MailSystemException;
+use Everlution\EmailBundle\Outbound\MailSystem\MailSystemResult;
 use Everlution\EmailBundle\Support\MessageId\Generator as MessageIdGenerator;
 use Everlution\EmailBundle\Transformer\OutboundMessageTransformer;
 
@@ -25,24 +26,15 @@ abstract class Mailer implements MailerInterface
     /** @var MailSystem */
     protected $mailSystem;
 
-    /** @var StorableMessageRepository */
-    protected $storableMessageRepository;
-
-    /** @var AttachmentLocator */
-    protected $attachmentLocator;
 
     /**
      * @param MessageIdGenerator $messageIdGenerator
      * @param MailSystem $mailSystem
-     * @param StorableMessageRepository $storableMessageRepository
-     * @param AttachmentLocator $attachmentLocator
      */
-    public function __construct(MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem, StorableMessageRepository $storableMessageRepository, AttachmentLocator $attachmentLocator)
+    public function __construct(MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem)
     {
         $this->messageIdGenerator = $messageIdGenerator;
         $this->mailSystem = $mailSystem;
-        $this->storableMessageRepository = $storableMessageRepository;
-        $this->attachmentLocator = $attachmentLocator;
     }
 
     /**
@@ -79,33 +71,49 @@ abstract class Mailer implements MailerInterface
 
     /**
      * @param OutboundMessage $message
-     * @return IdentifiableOutboundMessage
+     * @return UniqueOutboundMessage
      */
     protected function convertToIdentifiableMessage(OutboundMessage $message)
     {
         $newMessageId = $this->messageIdGenerator->generate();
 
-        return new IdentifiableOutboundMessage($newMessageId, $message);
+        return new UniqueOutboundMessage($newMessageId, $message);
     }
 
     /**
      * @param ProcessedOutboundMessage $processedMessage
+     * @throws MailSystemException
      */
-    protected function storeProcessedMessage(ProcessedOutboundMessage $processedMessage)
+    protected function sendProcessedMessage(ProcessedOutboundMessage $processedMessage)
     {
-        $this->storableMessageRepository->save($processedMessage->getStorableMessage());
-
-        $attachments = $processedMessage->getIdentifiableOutboundMessage()->getMessage()->getAttachments();
-        $this->storeAttachments($attachments, $processedMessage->getStorableMessage());
+        $result = $this->mailSystem->sendMessage($processedMessage->getUniqueOutboundMessage());
+        $this->handleMailSystemResult($result, $processedMessage);
     }
 
     /**
-     * @param Attachment[] $attachments
-     * @param StorableOutboundMessage $storableMessage
+     * @param ProcessedOutboundMessage $processedMessage
+     * @param DateTime $sendAt
+     * @throws MailSystemException
      */
-    protected function storeAttachments(array $attachments, StorableOutboundMessage $storableMessage)
+    protected function scheduleProcessedMessage(ProcessedOutboundMessage $processedMessage, DateTime $sendAt)
     {
-        $this->attachmentLocator->saveAttachments($attachments, $storableMessage->getId());
+        $result = $this->mailSystem->scheduleMessage($processedMessage->getUniqueOutboundMessage(), $sendAt);
+        $this->handleMailSystemResult($result, $processedMessage);
+
+        $processedMessage->getStorableMessage()->setScheduledSendTime($sendAt);
+    }
+
+    /**
+     * @param MailSystemResult $result
+     * @param ProcessedOutboundMessage $processedMessage
+     */
+    protected function handleMailSystemResult(MailSystemResult $result, ProcessedOutboundMessage $processedMessage)
+    {
+        $storableMessage = $processedMessage->getStorableMessage();
+
+        foreach ($result->getMailSystemMessagesInfo() as $mailSystemMessageInfo) {
+            $storableMessage->addMessageInfo(new StorableOutboundMessageInfo($storableMessage, $mailSystemMessageInfo));
+        }
     }
 
 }

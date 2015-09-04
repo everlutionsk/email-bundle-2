@@ -9,7 +9,7 @@ interface Attachment
      * Returns the MIME type of the attachment
      * @return string
      */
-    public function getType();
+    public function getMimeType();
 
     /**
      * @return string

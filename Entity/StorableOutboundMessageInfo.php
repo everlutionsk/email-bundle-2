@@ -57,7 +57,7 @@ class StorableOutboundMessageInfo
     /**
      * @var Recipient
      *
-     * @ORM\Column(name="recipient", type="object", nullable=false)
+     * @ORM\Column(name="recipient", type="emailRecipient", nullable=false)
      */
     protected $recipient;
 

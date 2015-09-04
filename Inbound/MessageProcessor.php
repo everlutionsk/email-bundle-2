@@ -3,7 +3,7 @@
 namespace Everlution\EmailBundle\Inbound;
 
 use Everlution\EmailBundle\Attachment\Attachment;
-use Everlution\EmailBundle\Attachment\AttachmentLocator;
+use Everlution\EmailBundle\Attachment\AttachmentManager;
 use Everlution\EmailBundle\Entity\StorableInboundMessage;
 use Everlution\EmailBundle\Entity\Repository\StorableInboundMessage as StorableMessageRepository;
 use Everlution\EmailBundle\Message\Inbound\InboundMessage;
@@ -18,17 +18,17 @@ class MessageProcessor
     /** @var StorableMessageRepository */
     protected $storableMessageRepository;
 
-    /** @var AttachmentLocator */
-    protected $attachmentLocator;
+    /** @var AttachmentManager */
+    protected $attachmentManager;
 
     /**
      * @param StorableMessageRepository $storableMessageRepository
-     * @param AttachmentLocator $attachmentLocator
+     * @param AttachmentManager $attachmentManager
      */
-    public function __construct(StorableMessageRepository $storableMessageRepository, AttachmentLocator $attachmentLocator)
+    public function __construct(StorableMessageRepository $storableMessageRepository, AttachmentManager $attachmentManager)
     {
         $this->storableMessageRepository = $storableMessageRepository;
-        $this->attachmentLocator = $attachmentLocator;
+        $this->attachmentManager = $attachmentManager;
     }
 
     /**
@@ -50,6 +50,7 @@ class MessageProcessor
 
         $this->storeStorableMessage($storableMessage);
         $this->storeAttachments($message->getAttachments(), $storableMessage);
+        $this->storeImages($message->getImages(), $storableMessage);
     }
 
     /**
@@ -76,7 +77,16 @@ class MessageProcessor
      */
     protected function storeAttachments(array $attachments, StorableInboundMessage $storableMessage)
     {
-        $this->attachmentLocator->saveAttachments($attachments, $storableMessage->getId());
+        $this->attachmentManager->saveAttachments($attachments, $storableMessage);
+    }
+
+    /**
+     * @param Attachment[] $images
+     * @param StorableInboundMessage $storableMessage
+     */
+    protected function storeImages(array $images, StorableInboundMessage $storableMessage)
+    {
+        $this->attachmentManager->saveImages($images, $storableMessage);
     }
 
 }

@@ -2,6 +2,8 @@
 
 namespace Everlution\EmailBundle\Support\Stream;
 
+use InvalidArgumentException;
+
 class BroadcastStream implements Stream
 {
 
@@ -10,11 +12,12 @@ class BroadcastStream implements Stream
 
     /**
      * @param callable $onDataHandler
+     * @throws InvalidArgumentException
      */
     public function listen($onDataHandler)
     {
         if (!is_callable($onDataHandler)) {
-            throw new \InvalidArgumentException('Cannot assign non-callable listener!');
+            throw new InvalidArgumentException('Cannot assign non-callable listener!');
         }
 
         $this->onDataHandlers[] = $onDataHandler;

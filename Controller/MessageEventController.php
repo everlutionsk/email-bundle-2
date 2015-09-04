@@ -2,12 +2,13 @@
 
 namespace Everlution\EmailBundle\Controller;
 
+use InvalidArgumentException;
 use Everlution\EmailBundle\Outbound\MessageEvent\MessageEventProcessor;
 use Everlution\EmailBundle\Outbound\MessageEvent\RequestProcessor;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class MessageEventController
+class MessageEventController extends BaseController
 {
 
     /** @var RequestProcessor */
@@ -33,12 +34,12 @@ class MessageEventController
     public function handleMessageEventAction(Request $request)
     {
         if (!$this->requestProcessor->isRequestSignatureCorrect($request)) {
-            return new JsonResponse(['status' => 'error', 'msg' => 'Access Denied! Invalid request signature.'], 403);
+            return $this->createAccessDeniedResponse();
         }
 
         $this->changeMessagesState($request);
 
-        return new JsonResponse(['status' => 'success'], 200);
+        return $this->createSuccessResponse();
     }
 
     /**
@@ -51,8 +52,8 @@ class MessageEventController
         foreach ($events as $event) {
             try {
                 $this->messageEventProcessor->changeMessageState($event);
-            } catch (\InvalidArgumentException $e) {
-                //TODO
+            } catch (InvalidArgumentException $e) {
+                //Ignores an exception, because there is the possibility of a situation in which an event occurs earlier than the message is stored in database!
             }
         }
     }

@@ -2,7 +2,7 @@
 
 namespace Everlution\EmailBundle\Message\Outbound;
 
-class IdentifiableOutboundMessage
+class UniqueOutboundMessage
 {
 
     /** @var string */

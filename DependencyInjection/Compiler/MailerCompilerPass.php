@@ -29,7 +29,7 @@ class MailerCompilerPass implements CompilerPassInterface
      */
     protected function addOutboundMessageTransformers(ContainerBuilder $container, Definition $definition)
     {
-        foreach ($container->findTaggedServiceIds('everlution.email.outbound.message_transformer') as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds('everlution.email.outbound_message_transformer') as $id => $attributes) {
             $definition->addMethodCall('addMessageTransformer', array(new Reference($id)));
         }
     }

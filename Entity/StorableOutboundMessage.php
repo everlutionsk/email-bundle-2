@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Everlution\EmailBundle\Header;
-use Everlution\EmailBundle\Message\Outbound\IdentifiableOutboundMessage;
+use Everlution\EmailBundle\Message\Outbound\UniqueOutboundMessage;
 use Everlution\EmailBundle\Recipient\Recipient;
 use Everlution\EmailBundle\Template\Template;
 
@@ -51,7 +51,7 @@ class StorableOutboundMessage
     /**
      * @var Recipient[]
      *
-     * @ORM\Column(name="recipients", type="array", nullable=false)
+     * @ORM\Column(name="recipients", type="emailRecipients", nullable=false)
      */
     protected $recipients;
 
@@ -93,7 +93,7 @@ class StorableOutboundMessage
     /**
      * @var Template
      *
-     * @ORM\Column(name="template", type="object", nullable=true)
+     * @ORM\Column(name="template", type="emailTemplate", nullable=true)
      */
     protected $template;
 
@@ -107,7 +107,7 @@ class StorableOutboundMessage
     /**
      * @var Header[]
      *
-     * @ORM\Column(name="custom_headers", type="array", nullable=true)
+     * @ORM\Column(name="custom_headers", type="emailHeaders", nullable=true)
      */
     protected $customHeaders;
 
@@ -140,10 +140,10 @@ class StorableOutboundMessage
     protected $messagesInfo;
 
     /**
-     * @param IdentifiableOutboundMessage $identifiableMessage
+     * @param UniqueOutboundMessage $identifiableMessage
      * @param string $mailSystemName
      */
-    public function __construct(IdentifiableOutboundMessage $identifiableMessage, $mailSystemName)
+    public function __construct(UniqueOutboundMessage $identifiableMessage, $mailSystemName)
     {
         $message = $identifiableMessage->getMessage();
 

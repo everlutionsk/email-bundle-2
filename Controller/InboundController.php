@@ -7,7 +7,7 @@ use Everlution\EmailBundle\Inbound\RequestProcessor;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class InboundController
+class InboundController extends BaseController
 {
 
     /** @var RequestProcessor */
@@ -33,12 +33,12 @@ class InboundController
     public function handleInboundAction(Request $request)
     {
         if (!$this->requestProcessor->isRequestSignatureCorrect($request)) {
-            return new JsonResponse(['status' => 'error', 'msg' => 'Access Denied! Invalid request signature.'], 403);
+            return $this->createAccessDeniedResponse();
         }
 
         $this->storeInboundMessages($request);
 
-        return new JsonResponse(['status' => 'success'], 200);
+        return $this->createSuccessResponse();
     }
 
     /**

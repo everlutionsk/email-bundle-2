@@ -7,28 +7,28 @@ use Everlution\EmailBundle\Entity\StorableOutboundMessage;
 class ProcessedOutboundMessage
 {
 
-    /** @var IdentifiableOutboundMessage */
-    protected $identifiableOutboundMessage;
+    /** @var UniqueOutboundMessage */
+    protected $uniqueOutboundMessage;
 
     /** @var StorableOutboundMessage */
     protected $storableMessage;
 
     /**
-     * @param IdentifiableOutboundMessage $identifiableOutboundMessage
+     * @param UniqueOutboundMessage $uniqueOutboundMessage
      * @param StorableOutboundMessage $storableMessage
      */
-    public function __construct(IdentifiableOutboundMessage $identifiableOutboundMessage, StorableOutboundMessage $storableMessage)
+    public function __construct(UniqueOutboundMessage $uniqueOutboundMessage, StorableOutboundMessage $storableMessage)
     {
-        $this->identifiableOutboundMessage = $identifiableOutboundMessage;
+        $this->uniqueOutboundMessage = $uniqueOutboundMessage;
         $this->storableMessage = $storableMessage;
     }
 
     /**
-     * @return IdentifiableOutboundMessage
+     * @return UniqueOutboundMessage
      */
-    public function getIdentifiableOutboundMessage()
+    public function getUniqueOutboundMessage()
     {
-        return $this->identifiableOutboundMessage;
+        return $this->uniqueOutboundMessage;
     }
 
     /**

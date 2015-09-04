@@ -4,6 +4,7 @@ namespace Everlution\EmailBundle\Outbound\MessageEvent;
 
 class MessageEvent
 {
+
     /** @var string */
     protected $mailSystemMessageId;
 

@@ -47,7 +47,7 @@ class StorableInboundMessage implements ReplyableMessage
     /**
      * @var Recipient[]
      *
-     * @ORM\Column(name="recipients", type="array", nullable=false)
+     * @ORM\Column(name="recipients", type="emailRecipients", nullable=false)
      */
     protected $recipients;
 
@@ -96,7 +96,7 @@ class StorableInboundMessage implements ReplyableMessage
     /**
      * @var Header[]
      *
-     * @ORM\Column(name="headers", type="array", nullable=true)
+     * @ORM\Column(name="headers", type="emailHeaders", nullable=true)
      */
     protected $headers;
 
