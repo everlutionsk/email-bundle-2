@@ -1,9 +1,8 @@
 <?php
 
-namespace Everlution\EmailBundle\Support;
+namespace Everlution\EmailBundle\Relationship;
 
-use Everlution\EmailBundle\Message\Outbound\OutboundMessage;
-use Everlution\EmailBundle\Message\ReplyableMessage;
+use Everlution\EmailBundle\Outbound\Message\OutboundMessage;
 
 class MessageRelationshipManager
 {
@@ -14,7 +13,7 @@ class MessageRelationshipManager
      * @param OutboundMessage $message
      * @param ReplyableMessage $parentMessage
      */
-    public function transformToReplyMessage(OutboundMessage $message, ReplyableMessage $parentMessage)
+    public function modifyToReplyMessage(OutboundMessage $message, ReplyableMessage $parentMessage)
     {
         $references = $parentMessage->getReferences() . ' ' . $parentMessage->getMessageId();
 

@@ -1,7 +1,7 @@
 services:
 
     everlution.email.message_relationship_manager:
-        class: Everlution\EmailBundle\Support\MessageRelationshipManager
+        class: Everlution\EmailBundle\Relationship\MessageRelationshipManager
 
 
     #OUTBOUND

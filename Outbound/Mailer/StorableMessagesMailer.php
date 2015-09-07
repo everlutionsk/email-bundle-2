@@ -5,7 +5,7 @@ namespace Everlution\EmailBundle\Outbound\Mailer;
 use Everlution\EmailBundle\Attachment\AttachmentManager;
 use Everlution\EmailBundle\Support\MessageId\Generator as MessageIdGenerator;
 use Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage as StorableMessageRepository;
-use Everlution\EmailBundle\Message\Outbound\ProcessedOutboundMessage;
+use Everlution\EmailBundle\Outbound\Message\ProcessedOutboundMessage;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystem;
 
 abstract class StorableMessagesMailer extends Mailer

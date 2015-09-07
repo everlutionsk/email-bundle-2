@@ -53,7 +53,8 @@ class MessageEventController extends BaseController
             try {
                 $this->messageEventProcessor->changeMessageState($event);
             } catch (InvalidArgumentException $e) {
-                //Ignores an exception, because there is the possibility of a situation in which an event occurs earlier than the message is stored in database!
+                // Ignores an exception, because there is the possibility of a situation in which an event
+                // occurs earlier than the message is stored in database!
             }
         }
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Everlution\EmailBundle\Template;
+namespace Everlution\EmailBundle\Message\Template;
 
 class Template
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Everlution\EmailBundle\Message;
+namespace Everlution\EmailBundle\Relationship;
 
 interface ReplyableMessage
 {

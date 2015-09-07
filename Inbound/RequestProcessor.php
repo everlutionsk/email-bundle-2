@@ -2,10 +2,11 @@
 
 namespace Everlution\EmailBundle\Inbound;
 
-use Everlution\EmailBundle\Message\Inbound\InboundMessage;
+use Everlution\EmailBundle\Inbound\Message\InboundMessage;
+use Everlution\EmailBundle\Support\RequestSignatureVerifier;
 use Symfony\Component\HttpFoundation\Request;
 
-interface RequestProcessor
+interface RequestProcessor extends RequestSignatureVerifier
 {
 
     /**
@@ -13,11 +14,5 @@ interface RequestProcessor
      * @return InboundMessage[]
      */
     public function createInboundMessages(Request $request);
-
-    /**
-     * @param Request $request
-     * @return bool
-     */
-    public function isRequestSignatureCorrect(Request $request);
 
 }

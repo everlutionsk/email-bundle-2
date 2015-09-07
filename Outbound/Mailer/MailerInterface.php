@@ -3,8 +3,8 @@
 namespace Everlution\EmailBundle\Outbound\Mailer;
 
 use DateTime;
-use Everlution\EmailBundle\Message\Outbound\OutboundMessage;
-use Everlution\EmailBundle\Message\Outbound\ProcessedOutboundMessage;
+use Everlution\EmailBundle\Outbound\Message\OutboundMessage;
+use Everlution\EmailBundle\Outbound\Message\ProcessedOutboundMessage;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystemException;
 
 interface MailerInterface

@@ -1,6 +1,6 @@
 <?php
 
-namespace Everlution\EmailBundle\Recipient;
+namespace Everlution\EmailBundle\Message\Recipient;
 
 class Recipient
 {

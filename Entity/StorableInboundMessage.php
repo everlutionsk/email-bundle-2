@@ -4,10 +4,10 @@ namespace Everlution\EmailBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Everlution\EmailBundle\Header;
-use Everlution\EmailBundle\Message\Inbound\InboundMessage;
-use Everlution\EmailBundle\Message\ReplyableMessage;
-use Everlution\EmailBundle\Recipient\Recipient;
+use Everlution\EmailBundle\Message\Header;
+use Everlution\EmailBundle\Inbound\Message\InboundMessage;
+use Everlution\EmailBundle\Relationship\ReplyableMessage;
+use Everlution\EmailBundle\Message\Recipient\Recipient;
 
 /**
  * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableInboundMessage")

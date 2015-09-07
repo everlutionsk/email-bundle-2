@@ -5,14 +5,14 @@ namespace Everlution\EmailBundle\Outbound\Mailer;
 use DateTime;
 use Everlution\EmailBundle\Entity\StorableOutboundMessage;
 use Everlution\EmailBundle\Entity\StorableOutboundMessageInfo;
-use Everlution\EmailBundle\Message\Outbound\UniqueOutboundMessage;
+use Everlution\EmailBundle\Outbound\Message\UniqueOutboundMessage;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystem;
-use Everlution\EmailBundle\Message\Outbound\OutboundMessage;
-use Everlution\EmailBundle\Message\Outbound\ProcessedOutboundMessage;
+use Everlution\EmailBundle\Outbound\Message\OutboundMessage;
+use Everlution\EmailBundle\Outbound\Message\ProcessedOutboundMessage;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystemException;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystemResult;
 use Everlution\EmailBundle\Support\MessageId\Generator as MessageIdGenerator;
-use Everlution\EmailBundle\Transformer\OutboundMessageTransformer;
+use Everlution\EmailBundle\Outbound\Message\OutboundMessageTransformer;
 
 abstract class Mailer implements MailerInterface
 {
@@ -25,7 +25,6 @@ abstract class Mailer implements MailerInterface
 
     /** @var MailSystem */
     protected $mailSystem;
-
 
     /**
      * @param MessageIdGenerator $messageIdGenerator
@@ -53,10 +52,10 @@ abstract class Mailer implements MailerInterface
     {
         $this->transformMessage($message);
 
-        $identifiableMessage = $this->convertToIdentifiableMessage($message);
-        $storableMessage = new StorableOutboundMessage($identifiableMessage, $this->mailSystem->getMailSystemName());
+        $uniqueMessage = $this->convertToUniqueMessage($message);
+        $storableMessage = new StorableOutboundMessage($uniqueMessage, $this->mailSystem->getMailSystemName());
 
-        return new ProcessedOutboundMessage($identifiableMessage, $storableMessage);
+        return new ProcessedOutboundMessage($uniqueMessage, $storableMessage);
     }
 
     /**
@@ -73,7 +72,7 @@ abstract class Mailer implements MailerInterface
      * @param OutboundMessage $message
      * @return UniqueOutboundMessage
      */
-    protected function convertToIdentifiableMessage(OutboundMessage $message)
+    protected function convertToUniqueMessage(OutboundMessage $message)
     {
         $newMessageId = $this->messageIdGenerator->generate();
 

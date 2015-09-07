@@ -6,8 +6,8 @@ use Everlution\EmailBundle\Attachment\Attachment;
 use Everlution\EmailBundle\Attachment\AttachmentManager;
 use Everlution\EmailBundle\Entity\StorableInboundMessage;
 use Everlution\EmailBundle\Entity\Repository\StorableInboundMessage as StorableMessageRepository;
-use Everlution\EmailBundle\Message\Inbound\InboundMessage;
-use Everlution\EmailBundle\Transformer\InboundMessageTransformer;
+use Everlution\EmailBundle\Inbound\Message\InboundMessage;
+use Everlution\EmailBundle\Inbound\Message\InboundMessageTransformer;
 
 class MessageProcessor
 {

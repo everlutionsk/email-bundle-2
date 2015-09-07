@@ -3,7 +3,7 @@
 namespace Everlution\EmailBundle\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Everlution\EmailBundle\Recipient\Recipient;
+use Everlution\EmailBundle\Message\Recipient\Recipient;
 
 class RecipientsType extends RecipientType
 {
@@ -15,7 +15,7 @@ class RecipientsType extends RecipientType
      * @param Recipient[]                                     $value    The value to convert.
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform The currently used database platform.
      *
-     * @return mixed The database representation of the value.
+     * @return string The database representation of the value.
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
@@ -34,7 +34,7 @@ class RecipientsType extends RecipientType
      * Converts a value from its database representation to its PHP representation
      * of this type.
      *
-     * @param array                                     $value    The value to convert.
+     * @param string                                    $value    The value to convert.
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform The currently used database platform.
      *
      * @return Recipient[] The PHP representation of the value.

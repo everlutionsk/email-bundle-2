@@ -5,7 +5,7 @@ namespace Everlution\EmailBundle\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystemMessageInfo;
-use Everlution\EmailBundle\Recipient\Recipient;
+use Everlution\EmailBundle\Message\Recipient\Recipient;
 
 /**
  * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageInfo")

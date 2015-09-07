@@ -1,11 +1,11 @@
 <?php
 
-namespace Everlution\EmailBundle\Message\Inbound;
+namespace Everlution\EmailBundle\Inbound\Message;
 
 use Everlution\EmailBundle\Attachment\Attachment;
-use Everlution\EmailBundle\Header;
-use Everlution\EmailBundle\Message\ReplyableMessage;
-use Everlution\EmailBundle\Recipient\Recipient;
+use Everlution\EmailBundle\Message\Header;
+use Everlution\EmailBundle\Relationship\ReplyableMessage;
+use Everlution\EmailBundle\Message\Recipient\Recipient;
 
 class InboundMessage implements ReplyableMessage
 {

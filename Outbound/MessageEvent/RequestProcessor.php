@@ -2,9 +2,10 @@
 
 namespace Everlution\EmailBundle\Outbound\MessageEvent;
 
+use Everlution\EmailBundle\Support\RequestSignatureVerifier;
 use Symfony\Component\HttpFoundation\Request;
 
-interface RequestProcessor
+interface RequestProcessor extends RequestSignatureVerifier
 {
 
     /**
@@ -12,11 +13,5 @@ interface RequestProcessor
      * @return MessageEvent[]
      */
     public function createMessageEvents(Request $request);
-
-    /**
-     * @param Request $request
-     * @return bool
-     */
-    public function isRequestSignatureCorrect(Request $request);
 
 }

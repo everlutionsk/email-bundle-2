@@ -19,18 +19,20 @@ class MailerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $this->addOutboundMessageTransformers($container, $container->getDefinition('everlution.email.outbound.synchronous_mailer'));
-        $this->addOutboundMessageTransformers($container, $container->getDefinition('everlution.email.outbound.asynchronous_mailer'));
+        $this->registerOutboundMessageTransformers($container, $container->getDefinition('everlution.email.outbound.synchronous_mailer'));
+        $this->registerOutboundMessageTransformers($container, $container->getDefinition('everlution.email.outbound.asynchronous_mailer'));
     }
 
     /**
      * @param ContainerBuilder $container
-     * @param Definition $definition
+     * @param Definition $mailerDefinition
      */
-    protected function addOutboundMessageTransformers(ContainerBuilder $container, Definition $definition)
+    protected function registerOutboundMessageTransformers(ContainerBuilder $container, Definition $mailerDefinition)
     {
-        foreach ($container->findTaggedServiceIds('everlution.email.outbound_message_transformer') as $id => $attributes) {
-            $definition->addMethodCall('addMessageTransformer', array(new Reference($id)));
+        $transformerTag = 'everlution.email.outbound.message_transformer';
+
+        foreach ($container->findTaggedServiceIds($transformerTag) as $id => $attributes) {
+            $mailerDefinition->addMethodCall('addMessageTransformer', array(new Reference($id)));
         }
     }
 

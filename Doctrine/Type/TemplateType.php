@@ -4,8 +4,8 @@ namespace Everlution\EmailBundle\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use Everlution\EmailBundle\Template\Parameter;
-use Everlution\EmailBundle\Template\Template;
+use Everlution\EmailBundle\Message\Template\Parameter;
+use Everlution\EmailBundle\Message\Template\Template;
 
 class TemplateType extends Type
 {
@@ -30,7 +30,7 @@ class TemplateType extends Type
      * @param Template                                     $value    The value to convert.
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform The currently used database platform.
      *
-     * @return mixed The database representation of the value.
+     * @return string The database representation of the value.
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
@@ -71,7 +71,7 @@ class TemplateType extends Type
      * Converts a value from its database representation to its PHP representation
      * of this type.
      *
-     * @param mixed                                     $value    The value to convert.
+     * @param string                                    $value    The value to convert.
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform The currently used database platform.
      *
      * @return Template The PHP representation of the value.

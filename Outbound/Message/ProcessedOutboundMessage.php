@@ -1,6 +1,6 @@
 <?php
 
-namespace Everlution\EmailBundle\Message\Outbound;
+namespace Everlution\EmailBundle\Outbound\Message;
 
 use Everlution\EmailBundle\Entity\StorableOutboundMessage;
 

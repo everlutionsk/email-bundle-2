@@ -1,19 +1,20 @@
 <?php
 
-namespace Everlution\EmailBundle;
+namespace Everlution\EmailBundle\Message\Template;
 
-class Header
+class Parameter
 {
 
     /** @var string */
     protected $name;
 
-    /** @var string */
+    /** @var mixed */
     protected $value;
 
     /**
+     * Parameter constructor.
      * @param string $name
-     * @param string $value
+     * @param mixed $value
      */
     public function __construct($name, $value)
     {
@@ -30,7 +31,7 @@ class Header
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getValue()
     {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Everlution\EmailBundle\Recipient;
+namespace Everlution\EmailBundle\Message\Recipient;
 
-class CcRecipient extends Recipient
+class BccRecipient extends Recipient
 {
 
     /**
@@ -11,7 +11,7 @@ class CcRecipient extends Recipient
      */
     public function __construct($email, $name = null)
     {
-        parent::__construct($email, $name, 'cc');
+        parent::__construct($email, $name, 'bcc');
     }
 
 }

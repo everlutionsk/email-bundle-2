@@ -2,7 +2,7 @@
 
 namespace Everlution\EmailBundle\Outbound\MailSystem;
 
-use Everlution\EmailBundle\Recipient\Recipient;
+use Everlution\EmailBundle\Message\Recipient\Recipient;
 
 class MailSystemMessageInfo
 {

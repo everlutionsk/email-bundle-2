@@ -6,10 +6,10 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Everlution\EmailBundle\Header;
-use Everlution\EmailBundle\Message\Outbound\UniqueOutboundMessage;
-use Everlution\EmailBundle\Recipient\Recipient;
-use Everlution\EmailBundle\Template\Template;
+use Everlution\EmailBundle\Message\Header;
+use Everlution\EmailBundle\Outbound\Message\UniqueOutboundMessage;
+use Everlution\EmailBundle\Message\Recipient\Recipient;
+use Everlution\EmailBundle\Message\Template\Template;
 
 /**
  * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage")
@@ -140,14 +140,14 @@ class StorableOutboundMessage
     protected $messagesInfo;
 
     /**
-     * @param UniqueOutboundMessage $identifiableMessage
+     * @param UniqueOutboundMessage $uniqueMessage
      * @param string $mailSystemName
      */
-    public function __construct(UniqueOutboundMessage $identifiableMessage, $mailSystemName)
+    public function __construct(UniqueOutboundMessage $uniqueMessage, $mailSystemName)
     {
-        $message = $identifiableMessage->getMessage();
+        $message = $uniqueMessage->getMessage();
 
-        $this->messageId = $identifiableMessage->getMessageId();
+        $this->messageId = $uniqueMessage->getMessageId();
         $this->inReplyTo = $message->getInReplyTo();
         $this->references = $message->getReferences();
         $this->recipients = $message->getRecipients();

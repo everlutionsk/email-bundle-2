@@ -3,25 +3,25 @@
 namespace Everlution\EmailBundle\Outbound\MailSystem;
 
 use DateTime;
-use Everlution\EmailBundle\Message\Outbound\UniqueOutboundMessage;
+use Everlution\EmailBundle\Outbound\Message\UniqueOutboundMessage;
 
 interface MailSystem
 {
 
     /**
-     * @param UniqueOutboundMessage $identifiableMessage
+     * @param UniqueOutboundMessage $uniqueMessage
      * @return MailSystemResult
      * @throws MailSystemException
      */
-    public function sendMessage(UniqueOutboundMessage $identifiableMessage);
+    public function sendMessage(UniqueOutboundMessage $uniqueMessage);
 
     /**
-     * @param UniqueOutboundMessage $identifiableMessage
+     * @param UniqueOutboundMessage $uniqueMessage
      * @param DateTime $sendAt
      * @return MailSystemResult
      * @throws MailSystemException
      */
-    public function scheduleMessage(UniqueOutboundMessage $identifiableMessage, DateTime $sendAt);
+    public function scheduleMessage(UniqueOutboundMessage $uniqueMessage, DateTime $sendAt);
 
     /**
      * @return string

@@ -1,8 +1,6 @@
 <?php
 
-namespace Everlution\EmailBundle\Transformer;
-
-use Everlution\EmailBundle\Message\Outbound\OutboundMessage;
+namespace Everlution\EmailBundle\Outbound\Message;
 
 interface OutboundMessageTransformer
 {

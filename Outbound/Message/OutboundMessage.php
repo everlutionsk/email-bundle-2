@@ -1,11 +1,11 @@
 <?php
 
-namespace Everlution\EmailBundle\Message\Outbound;
+namespace Everlution\EmailBundle\Outbound\Message;
 
 use Everlution\EmailBundle\Attachment\Attachment;
-use Everlution\EmailBundle\Header;
-use Everlution\EmailBundle\Recipient\Recipient;
-use Everlution\EmailBundle\Template\Template;
+use Everlution\EmailBundle\Message\Header;
+use Everlution\EmailBundle\Message\Recipient\Recipient;
+use Everlution\EmailBundle\Message\Template\Template;
 
 class OutboundMessage
 {
