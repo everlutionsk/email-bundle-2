@@ -28,7 +28,7 @@ class InboundMessageProcessorCompilerPass implements CompilerPassInterface
      */
     protected function registerInboundMessageTransformers(ContainerBuilder $container, Definition $messageProcessorDefinition)
     {
-        $transformerTag = 'everlution.email.inbound_message_transformer';
+        $transformerTag = 'everlution.email.inbound.message_transformer';
 
         foreach ($container->findTaggedServiceIds($transformerTag) as $id => $attributes) {
             $messageProcessorDefinition->addMethodCall('addMessageTransformer', array(new Reference($id)));

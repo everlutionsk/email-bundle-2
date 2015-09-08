@@ -31,7 +31,7 @@ class MessageEventController extends BaseController
      * @param Request $request
      * @return JsonResponse
      */
-    public function handleMessageEventAction(Request $request)
+    public function handleMessageEvent(Request $request)
     {
         if (!$this->requestProcessor->isRequestSignatureCorrect($request)) {
             return $this->createAccessDeniedResponse();

@@ -30,7 +30,7 @@ class InboundController extends BaseController
      * @param Request $request
      * @return JsonResponse
      */
-    public function handleInboundAction(Request $request)
+    public function handleInbound(Request $request)
     {
         if (!$this->requestProcessor->isRequestSignatureCorrect($request)) {
             return $this->createAccessDeniedResponse();
