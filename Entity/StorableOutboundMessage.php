@@ -135,7 +135,7 @@ class StorableOutboundMessage
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="Everlution\EmailBundle\Entity\StorableOutboundMessageInfo", mappedBy="storableOutboundMessage", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="StorableOutboundMessageInfo", mappedBy="storableOutboundMessage", cascade={"persist", "remove"})
      */
     protected $messagesInfo;
 

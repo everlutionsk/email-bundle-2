@@ -27,8 +27,8 @@ class StorableOutboundMessageInfo
     /**
      * @var StorableOutboundMessage
      *
-     * @ORM\ManyToOne(targetEntity="Everlution\EmailBundle\Entity\StorableOutboundMessage", inversedBy="messagesInfo")
-     * @ORM\JoinColumn(name="email_outbound_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="StorableOutboundMessage", inversedBy="messagesInfo")
+     * @ORM\JoinColumn(name="email_outbound_id", referencedColumnName="id", nullable=false)
      **/
     protected $storableOutboundMessage;
 
