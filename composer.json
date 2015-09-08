@@ -1,5 +1,5 @@
 {
-  "name": "everlutionsk/EmailBundle2",
+  "name": "everlutionsk/email-bundle-2",
   "version": "0.1.0",
   "description": "Everlution email bundle for Symfony framework",
   "type": "everlution-bundle",
@@ -18,7 +18,7 @@
     "symfony/dependency-injection": "^2.5"
   },
   "autoload": {
-    "psr-0": { "Everlution\\EmailBundle2": "" }
+    "psr-0": { "Everlution\\EmailBundle": "" }
   },
-  "target-dir": "Everlution/EmailBundle2"
+  "target-dir": "Everlution/EmailBundle"
 }
