@@ -140,5 +140,14 @@ Register service, which implements [InboundMessageTransformer](Inbound/Message/I
 ```
 everlution.email.inbound.message_transformer
 ```
-#TODO
-- messages with template
+### Message templates
+Some *mail systems* supports message templates, which are defined in this systems. The following code shows how to use this templates.
+```php
+$parameter = new Parameter('PARAMETER_NAME', 'PARAMETER_VALUE');
+$template = new Template('TEMPLATE_NAME', [$parameter]);
+
+$message->setTemplate($template);
+```
+
+# Supported mail systems
+[**Mandrill**](https://github.com/everlutionsk/MandrillBundle)
