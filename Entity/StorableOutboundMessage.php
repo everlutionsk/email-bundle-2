@@ -135,9 +135,9 @@ class StorableOutboundMessage
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="StorableOutboundMessageInfo", mappedBy="storableOutboundMessage", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="StorableOutboundMessageStatus", mappedBy="storableOutboundMessage", cascade={"persist", "remove"})
      */
-    protected $messagesInfo;
+    protected $messagesStatus;
 
     /**
      * @param UniqueOutboundMessage $uniqueMessage
@@ -162,7 +162,7 @@ class StorableOutboundMessage
 
         $this->mailSystem = $mailSystemName;
         $this->createdAt = new DateTime('now');
-        $this->messagesInfo = new ArrayCollection();
+        $this->messagesStatus = new ArrayCollection();
     }
 
 
@@ -460,19 +460,19 @@ class StorableOutboundMessage
     }
 
     /**
-     * @param StorableOutboundMessageInfo $messageInfo
+     * @param StorableOutboundMessageStatus $messageStatus
      */
-    public function addMessageInfo(StorableOutboundMessageInfo $messageInfo)
+    public function addMessageStatus(StorableOutboundMessageStatus $messageStatus)
     {
-        $this->messagesInfo->add($messageInfo);
+        $this->messagesStatus->add($messageStatus);
     }
 
     /**
-     * @param StorableOutboundMessageInfo $messageInfo
+     * @param StorableOutboundMessageStatus $messageStatus
      */
-    public function removeMessageInfo(StorableOutboundMessageInfo $messageInfo)
+    public function removeMessageStatus(StorableOutboundMessageStatus $messageStatus)
     {
-        $this->messagesInfo->removeElement($messageInfo);
+        $this->messagesStatus->removeElement($messageStatus);
     }
 
 }

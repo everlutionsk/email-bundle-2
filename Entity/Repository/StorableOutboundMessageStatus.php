@@ -2,9 +2,9 @@
 
 namespace Everlution\EmailBundle\Entity\Repository;
 
-use Everlution\EmailBundle\Entity\StorableOutboundMessageInfo as Entity;
+use Everlution\EmailBundle\Entity\StorableOutboundMessageStatus as Entity;
 
-class StorableOutboundMessageInfo extends BaseRepository
+class StorableOutboundMessageStatus extends BaseRepository
 {
 
     /**

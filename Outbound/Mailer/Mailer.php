@@ -4,7 +4,7 @@ namespace Everlution\EmailBundle\Outbound\Mailer;
 
 use DateTime;
 use Everlution\EmailBundle\Entity\StorableOutboundMessage;
-use Everlution\EmailBundle\Entity\StorableOutboundMessageInfo;
+use Everlution\EmailBundle\Entity\StorableOutboundMessageStatus;
 use Everlution\EmailBundle\Outbound\Message\UniqueOutboundMessage;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystem;
 use Everlution\EmailBundle\Outbound\Message\OutboundMessage;
@@ -110,8 +110,8 @@ abstract class Mailer implements MailerInterface
     {
         $storableMessage = $processedMessage->getStorableMessage();
 
-        foreach ($result->getMailSystemMessagesInfo() as $mailSystemMessageInfo) {
-            $storableMessage->addMessageInfo(new StorableOutboundMessageInfo($storableMessage, $mailSystemMessageInfo));
+        foreach ($result->getMailSystemMessagesStatus() as $mailSystemMessageStatus) {
+            $storableMessage->addMessageStatus(new StorableOutboundMessageStatus($storableMessage, $mailSystemMessageStatus));
         }
     }
 

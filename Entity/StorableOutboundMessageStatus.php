@@ -4,17 +4,17 @@ namespace Everlution\EmailBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Everlution\EmailBundle\Outbound\MailSystem\MailSystemMessageInfo;
+use Everlution\EmailBundle\Outbound\MailSystem\MailSystemMessageStatus;
 use Everlution\EmailBundle\Message\Recipient\Recipient;
 
 /**
- * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageInfo")
- * @ORM\Table(name="email_outbound_message_info", indexes={
+ * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageStatus")
+ * @ORM\Table(name="email_outbound_message_status", indexes={
  *          @ORM\Index(name="search", columns={"email_outbound_id", "mail_system_message_id"}),
  *      })
  * @ORM\HasLifecycleCallbacks
  */
-class StorableOutboundMessageInfo
+class StorableOutboundMessageStatus
 {
 
     /**
@@ -27,7 +27,7 @@ class StorableOutboundMessageInfo
     /**
      * @var StorableOutboundMessage
      *
-     * @ORM\ManyToOne(targetEntity="StorableOutboundMessage", inversedBy="messagesInfo")
+     * @ORM\ManyToOne(targetEntity="StorableOutboundMessage", inversedBy="messagesStatus")
      * @ORM\JoinColumn(name="email_outbound_id", referencedColumnName="id", nullable=false)
      **/
     protected $storableOutboundMessage;
@@ -70,16 +70,16 @@ class StorableOutboundMessageInfo
 
     /**
      * @param StorableOutboundMessage $storableOutboundMessage
-     * @param MailSystemMessageInfo $mailSystemMessage
+     * @param MailSystemMessageStatus $mailSystemMessageStatus
      */
-    public function __construct(StorableOutboundMessage $storableOutboundMessage, MailSystemMessageInfo $mailSystemMessage)
+    public function __construct(StorableOutboundMessage $storableOutboundMessage, MailSystemMessageStatus $mailSystemMessageStatus)
     {
         $this->storableOutboundMessage = $storableOutboundMessage;
 
-        $this->mailSystemMessageId = $mailSystemMessage->getMailSystemMessageId();
-        $this->status = $mailSystemMessage->getStatus();
-        $this->rejectReason = $mailSystemMessage->getRejectReason();
-        $this->recipient = $mailSystemMessage->getRecipient();
+        $this->mailSystemMessageId = $mailSystemMessageStatus->getMailSystemMessageId();
+        $this->status = $mailSystemMessageStatus->getStatus();
+        $this->rejectReason = $mailSystemMessageStatus->getRejectReason();
+        $this->recipient = $mailSystemMessageStatus->getRecipient();
     }
 
     /**
@@ -117,7 +117,7 @@ class StorableOutboundMessageInfo
 
     /**
      * @param string $status
-     * @return StorableOutboundMessageInfo
+     * @return StorableOutboundMessageStatus
      */
     public function setStatus($status)
     {
@@ -136,7 +136,7 @@ class StorableOutboundMessageInfo
 
     /**
      * @param string $rejectReason
-     * @return StorableOutboundMessageInfo
+     * @return StorableOutboundMessageStatus
      */
     public function setRejectReason($rejectReason)
     {

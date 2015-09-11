@@ -3,21 +3,21 @@
 namespace Everlution\EmailBundle\Outbound\MessageEvent;
 
 use InvalidArgumentException;
-use Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageInfo as MessageInfoRepository;
-use Everlution\EmailBundle\Entity\StorableOutboundMessageInfo;
+use Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageStatus as MessageStatusRepository;
+use Everlution\EmailBundle\Entity\StorableOutboundMessageStatus;
 
 class MessageEventProcessor
 {
 
-    /** @var MessageInfoRepository */
-    protected $messageInfoRepository;
+    /** @var MessageStatusRepository */
+    protected $messageStatusRepository;
 
     /**
-     * @param MessageInfoRepository $messageInfoRepository
+     * @param MessageStatusRepository $messageStatusRepository
      */
-    public function __construct(MessageInfoRepository $messageInfoRepository)
+    public function __construct(MessageStatusRepository $messageStatusRepository)
     {
-        $this->messageInfoRepository = $messageInfoRepository;
+        $this->messageStatusRepository = $messageStatusRepository;
     }
 
     /**
@@ -26,28 +26,28 @@ class MessageEventProcessor
      */
     public function changeMessageState(MessageEvent $messageEvent)
     {
-        $messageInfo = $this->findMessageInfoEntity($messageEvent);
+        $messageStatus = $this->findMessageStatusEntity($messageEvent);
 
-        if ($messageInfo === null) {
-            throw new InvalidArgumentException('Cannot change MessageState. Message not found!');
+        if ($messageStatus === null) {
+            throw new InvalidArgumentException('Cannot change MessageStatus. Message not found!');
         }
 
-        $messageInfo->setStatus($messageEvent->getStatus());
-        $messageInfo->setRejectReason($messageEvent->getRejectReason());
+        $messageStatus->setStatus($messageEvent->getStatus());
+        $messageStatus->setRejectReason($messageEvent->getRejectReason());
 
-        $this->messageInfoRepository->save($messageInfo);
+        $this->messageStatusRepository->save($messageStatus);
     }
 
     /**
      * @param MessageEvent $messageEvent
-     * @return StorableOutboundMessageInfo|null
+     * @return StorableOutboundMessageStatus|null
      */
-    private function findMessageInfoEntity(MessageEvent $messageEvent)
+    private function findMessageStatusEntity(MessageEvent $messageEvent)
     {
         $mailSystemName = $messageEvent->getMailSystemName();
         $mailSystemMessageId = $messageEvent->getMailSystemMessageId();
 
-        return $this->messageInfoRepository->findOneByMailSystemMessageId($mailSystemMessageId, $mailSystemName);
+        return $this->messageStatusRepository->findOneByMailSystemMessageId($mailSystemMessageId, $mailSystemName);
     }
 
 }

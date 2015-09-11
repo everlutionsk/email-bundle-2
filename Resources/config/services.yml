@@ -32,7 +32,7 @@ services:
     everlution.email.outbound.message_event.processor:
         class: Everlution\EmailBundle\Outbound\MessageEvent\MessageEventProcessor
         arguments:
-            - @everlution.email.outbound.message_info_repository
+            - @everlution.email.outbound.message_status_repository
 
     everlution.email.outbound.message_repository:
         class: Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage
@@ -41,12 +41,12 @@ services:
         arguments:
             - Everlution\EmailBundle\Entity\StorableOutboundMessage
 
-    everlution.email.outbound.message_info_repository:
-        class: Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageInfo
+    everlution.email.outbound.message_status_repository:
+        class: Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageStatus
         factory_service: doctrine.orm.default_entity_manager
         factory_method: getRepository
         arguments:
-            - Everlution\EmailBundle\Entity\StorableOutboundMessageInfo
+            - Everlution\EmailBundle\Entity\StorableOutboundMessageStatus
 
     everlution.email.stream.kernel_terminate:
         class: Everlution\EmailBundle\Support\Stream\BroadcastStream

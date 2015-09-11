@@ -6,8 +6,8 @@ interface MailSystemResult
 {
 
     /**
-     * @return MailSystemMessageInfo[]
+     * @return MailSystemMessageStatus[]
      */
-    public function getMailSystemMessagesInfo();
+    public function getMailSystemMessagesStatus();
 
 }

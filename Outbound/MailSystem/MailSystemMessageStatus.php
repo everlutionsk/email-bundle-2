@@ -4,7 +4,7 @@ namespace Everlution\EmailBundle\Outbound\MailSystem;
 
 use Everlution\EmailBundle\Message\Recipient\Recipient;
 
-class MailSystemMessageInfo
+class MailSystemMessageStatus
 {
 
     /** @var string */
