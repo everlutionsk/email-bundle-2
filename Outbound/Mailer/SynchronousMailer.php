@@ -33,9 +33,9 @@ class SynchronousMailer extends StorableMessagesMailer
      */
     public function scheduleMessage(OutboundMessage $message, DateTime $sendAt)
     {
-        $processedMessage = $this->processMessage($message);
+        $processedMessage = $this->processMessage($message, $sendAt);
 
-        $this->scheduleProcessedMessage($processedMessage, $sendAt);
+        $this->scheduleProcessedMessage($processedMessage);
         $this->storeProcessedMessage($processedMessage);
 
         return $processedMessage;

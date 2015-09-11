@@ -3,12 +3,12 @@
 namespace Everlution\EmailBundle\Outbound\Mailer;
 
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Everlution\EmailBundle\Attachment\AttachmentManager;
 use Everlution\EmailBundle\Outbound\Message\OutboundMessage;
 use Everlution\EmailBundle\Outbound\Message\ProcessedOutboundMessage as ProcessedMessage;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystem;
 use Everlution\EmailBundle\Support\Stream\Stream;
-use Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage as StorableMessageRepository;
 use Everlution\EmailBundle\Support\MessageId\Generator as MessageIdGenerator;
 
 class AsynchronousMailer extends StorableMessagesMailer
@@ -17,19 +17,19 @@ class AsynchronousMailer extends StorableMessagesMailer
     /** @var ProcessedMessage[] */
     protected $delayedMessages;
 
-    /** @var array */
+    /** @var ProcessedMessage[] */
     protected $delayedSchedules;
 
     /**
      * @param Stream $asyncHandlingLauncher
      * @param MessageIdGenerator $messageIdGenerator
      * @param MailSystem $mailSystem
-     * @param StorableMessageRepository $storableMessageRepository
-     * @param AttachmentManager $attachmentLocator
+     * @param EntityManagerInterface $entityManager
+     * @param AttachmentManager $attachmentManager
      */
-    public function __construct(Stream $asyncHandlingLauncher, MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem, StorableMessageRepository $storableMessageRepository, AttachmentManager $attachmentLocator)
+    public function __construct(Stream $asyncHandlingLauncher, MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem, EntityManagerInterface $entityManager, AttachmentManager $attachmentManager)
     {
-        parent::__construct($messageIdGenerator, $mailSystem, $storableMessageRepository, $attachmentLocator);
+        parent::__construct($messageIdGenerator, $mailSystem, $entityManager, $attachmentManager);
         $this->registerStreamListener($asyncHandlingLauncher);
     }
 
@@ -40,6 +40,7 @@ class AsynchronousMailer extends StorableMessagesMailer
     public function sendMessage(OutboundMessage $message)
     {
         $processedMessage = $this->processMessage($message);
+        $this->storeProcessedMessage($processedMessage);
 
         $this->delayedMessages[] = $processedMessage;
 
@@ -53,12 +54,10 @@ class AsynchronousMailer extends StorableMessagesMailer
      */
     public function scheduleMessage(OutboundMessage $message, DateTime $sendAt)
     {
-        $processedMessage = $this->processMessage($message);
+        $processedMessage = $this->processMessage($message, $sendAt);
+        $this->storeProcessedMessage($processedMessage);
 
-        $this->delayedSchedules = [
-            'sentAt' => $sendAt,
-            'message' => $processedMessage
-        ];
+        $this->delayedSchedules[] = $processedMessage;
 
         return $processedMessage;
     }
@@ -78,7 +77,6 @@ class AsynchronousMailer extends StorableMessagesMailer
     {
         foreach ($this->delayedMessages as $processedMessage) {
             $this->sendProcessedMessage($processedMessage);
-            $this->storeProcessedMessage($processedMessage);
         }
 
         $this->delayedMessages = [];
@@ -86,9 +84,8 @@ class AsynchronousMailer extends StorableMessagesMailer
 
     protected function sendScheduledMessages()
     {
-        foreach ($this->delayedSchedules as $schedule) {
-            $this->scheduleProcessedMessage($schedule['message'], $schedule['sentAt']);
-            $this->storeProcessedMessage($schedule['message']);
+        foreach ($this->delayedSchedules as $processedMessage) {
+            $this->scheduleProcessedMessage($processedMessage);
         }
 
         $this->delayedSchedules = [];

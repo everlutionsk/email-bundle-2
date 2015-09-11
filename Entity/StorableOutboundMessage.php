@@ -142,8 +142,9 @@ class StorableOutboundMessage
     /**
      * @param UniqueOutboundMessage $uniqueMessage
      * @param string $mailSystemName
+     * @param DateTime|null $scheduledSendTime
      */
-    public function __construct(UniqueOutboundMessage $uniqueMessage, $mailSystemName)
+    public function __construct(UniqueOutboundMessage $uniqueMessage, $mailSystemName, DateTime $scheduledSendTime = null)
     {
         $message = $uniqueMessage->getMessage();
 
@@ -163,6 +164,7 @@ class StorableOutboundMessage
         $this->mailSystem = $mailSystemName;
         $this->createdAt = new DateTime('now');
         $this->messagesStatus = new ArrayCollection();
+        $this->scheduledSendTime = $scheduledSendTime;
     }
 
 

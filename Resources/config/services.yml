@@ -11,7 +11,7 @@ services:
         arguments:
             - @everlution.email.ext.message_id_generator
             - @everlution.email.ext.mail_system
-            - @everlution.email.outbound.message_repository
+            - @doctrine.orm.entity_manager
             - @everlution.email.ext.outbound.attachment_manager
 
     everlution.email.outbound.asynchronous_mailer:
@@ -20,7 +20,7 @@ services:
             - @everlution.email.ext.async_stream
             - @everlution.email.ext.message_id_generator
             - @everlution.email.ext.mail_system
-            - @everlution.email.outbound.message_repository
+            - @doctrine.orm.entity_manager
             - @everlution.email.ext.outbound.attachment_manager
 
     everlution.email.outbound.message_event.controller:
