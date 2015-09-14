@@ -3,7 +3,7 @@
 namespace Everlution\EmailBundle\Outbound\Mailer;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Everlution\EmailBundle\Attachment\AttachmentManager;
+use Everlution\EmailBundle\Outbound\Attachment\AttachmentSwapper;
 use Everlution\EmailBundle\Entity\StorableOutboundMessageStatus;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystemResult;
 use Everlution\EmailBundle\Support\MessageId\Generator as MessageIdGenerator;
@@ -13,8 +13,8 @@ use Everlution\EmailBundle\Outbound\MailSystem\MailSystem;
 abstract class StorableMessagesMailer extends Mailer
 {
 
-    /** @var AttachmentManager */
-    protected $attachmentManager;
+    /** @var AttachmentSwapper */
+    protected $attachmentSwapper;
 
     /** @var EntityManagerInterface */
     protected $entityManager;
@@ -23,12 +23,12 @@ abstract class StorableMessagesMailer extends Mailer
      * @param MessageIdGenerator $messageIdGenerator
      * @param MailSystem $mailSystem
      * @param EntityManagerInterface $entityManager
-     * @param AttachmentManager $attachmentManager
+     * @param AttachmentSwapper $attachmentSwapper
      */
-    public function __construct(MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem, EntityManagerInterface $entityManager, AttachmentManager $attachmentManager)
+    public function __construct(MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem, EntityManagerInterface $entityManager, AttachmentSwapper $attachmentSwapper)
     {
         parent::__construct($messageIdGenerator, $mailSystem);
-        $this->attachmentManager = $attachmentManager;
+        $this->attachmentSwapper = $attachmentSwapper;
         $this->entityManager = $entityManager;
     }
 
@@ -52,7 +52,7 @@ abstract class StorableMessagesMailer extends Mailer
         $attachments = $processedMessage->getUniqueOutboundMessage()->getMessage()->getAttachments();
         $storableMessage = $processedMessage->getStorableMessage();
 
-        $this->attachmentManager->saveAttachments($attachments, $storableMessage);
+        $this->attachmentSwapper->saveAttachments($attachments, $storableMessage);
     }
 
     /**
@@ -63,7 +63,7 @@ abstract class StorableMessagesMailer extends Mailer
         $attachments = $processedMessage->getUniqueOutboundMessage()->getMessage()->getImages();
         $storableMessage = $processedMessage->getStorableMessage();
 
-        $this->attachmentManager->saveImages($attachments, $storableMessage);
+        $this->attachmentSwapper->saveImages($attachments, $storableMessage);
     }
 
     /**

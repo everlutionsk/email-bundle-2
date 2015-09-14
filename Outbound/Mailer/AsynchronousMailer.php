@@ -4,7 +4,7 @@ namespace Everlution\EmailBundle\Outbound\Mailer;
 
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Everlution\EmailBundle\Attachment\AttachmentManager;
+use Everlution\EmailBundle\Outbound\Attachment\AttachmentSwapper;
 use Everlution\EmailBundle\Outbound\Message\OutboundMessage;
 use Everlution\EmailBundle\Outbound\Message\ProcessedOutboundMessage as ProcessedMessage;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystem;
@@ -25,11 +25,11 @@ class AsynchronousMailer extends StorableMessagesMailer
      * @param MessageIdGenerator $messageIdGenerator
      * @param MailSystem $mailSystem
      * @param EntityManagerInterface $entityManager
-     * @param AttachmentManager $attachmentManager
+     * @param AttachmentSwapper $attachmentSwapper
      */
-    public function __construct(Stream $asyncHandlingLauncher, MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem, EntityManagerInterface $entityManager, AttachmentManager $attachmentManager)
+    public function __construct(Stream $asyncHandlingLauncher, MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem, EntityManagerInterface $entityManager, AttachmentSwapper $attachmentSwapper)
     {
-        parent::__construct($messageIdGenerator, $mailSystem, $entityManager, $attachmentManager);
+        parent::__construct($messageIdGenerator, $mailSystem, $entityManager, $attachmentSwapper);
         $this->registerStreamListener($asyncHandlingLauncher);
     }
 

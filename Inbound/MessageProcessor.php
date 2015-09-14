@@ -3,7 +3,7 @@
 namespace Everlution\EmailBundle\Inbound;
 
 use Everlution\EmailBundle\Attachment\Attachment;
-use Everlution\EmailBundle\Attachment\AttachmentManager;
+use Everlution\EmailBundle\Inbound\Attachment\AttachmentSwapper;
 use Everlution\EmailBundle\Entity\StorableInboundMessage;
 use Everlution\EmailBundle\Entity\Repository\StorableInboundMessage as StorableMessageRepository;
 use Everlution\EmailBundle\Inbound\Message\InboundMessage;
@@ -18,17 +18,17 @@ class MessageProcessor
     /** @var StorableMessageRepository */
     protected $storableMessageRepository;
 
-    /** @var AttachmentManager */
-    protected $attachmentManager;
+    /** @var AttachmentSwapper */
+    protected $attachmentSwapper;
 
     /**
      * @param StorableMessageRepository $storableMessageRepository
-     * @param AttachmentManager $attachmentManager
+     * @param AttachmentSwapper $attachmentSwapper
      */
-    public function __construct(StorableMessageRepository $storableMessageRepository, AttachmentManager $attachmentManager)
+    public function __construct(StorableMessageRepository $storableMessageRepository, AttachmentSwapper $attachmentSwapper)
     {
         $this->storableMessageRepository = $storableMessageRepository;
-        $this->attachmentManager = $attachmentManager;
+        $this->attachmentSwapper = $attachmentSwapper;
     }
 
     /**
@@ -77,7 +77,7 @@ class MessageProcessor
      */
     protected function storeAttachments(array $attachments, StorableInboundMessage $storableMessage)
     {
-        $this->attachmentManager->saveAttachments($attachments, $storableMessage);
+        $this->attachmentSwapper->saveAttachments($attachments, $storableMessage);
     }
 
     /**
@@ -86,7 +86,7 @@ class MessageProcessor
      */
     protected function storeImages(array $images, StorableInboundMessage $storableMessage)
     {
-        $this->attachmentManager->saveImages($images, $storableMessage);
+        $this->attachmentSwapper->saveImages($images, $storableMessage);
     }
 
 }

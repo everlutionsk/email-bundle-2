@@ -44,9 +44,9 @@ everlution_email:
     domain_name: APP_DOMAIN
     mail_system: Implementation of Outbound\MailSystem\MailSystem
     async_stream: Implementation of Support\Stream\Stream
-    attachment_managers:
-        inbound: Implementation of Attachment\AttachmentManager
-        outbound: Implementation of Attachment\AttachmentManager
+    attachment_swappers:
+        inbound: Implementation of Inbound\Attachment\AttachmentSwapper
+        outbound: Implementation of Outbound\Attachment\AttachmentSwapper
     request_processors:
         inbound: Implementation of Inbound\RequestProcessor
         outbound_message_event: Implementation of Outbound\MessageEvent\RequestProcessor
@@ -56,7 +56,7 @@ everlution_email:
 
 **async_stream** - Bundle allows to send email messages asynchronously. Email messages is stored in memory unil some value is added into this Stream. Good example is a Stream of Symfony's [kernel.terminate](http://symfony.com/doc/current/components/http_kernel/introduction.html#the-kernel-terminate-event) events.
 
-**attachment_managers** - After sending or receiving a message, bundle try to save the message's attachments by using this *attachment managers*. This managers can save attachments in various ways.
+**attachment_swappers** - After sending or receiving a message, bundle try to save the message's attachments by using this *attachment swappers*. This swappers can save attachments in various ways.
 
 **request_processors** - Bundle provide common mechanism to handle *inbound messages* and *outbound message events*. This events may occur for example when external *mail system* try to send scheduled messages. However, different *mail systems* sending data in different format. Request processors transform this data into format, which is known for this bundle.
 
