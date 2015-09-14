@@ -12,12 +12,12 @@ interface AttachmentSwapper
      * @param Attachment[] $attachments
      * @param StorableOutboundMessage $storableMessage
      */
-    public function saveAttachments(array $attachments, $storableMessage);
+    public function saveAttachments(array $attachments, StorableOutboundMessage $storableMessage);
 
     /**
      * @param Attachment[] $images
      * @param StorableOutboundMessage $storableMessage
      */
-    public function saveImages(array $images, $storableMessage);
+    public function saveImages(array $images, StorableOutboundMessage $storableMessage);
 
 }
