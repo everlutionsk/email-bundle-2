@@ -6,17 +6,22 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Everlution\EmailBundle\Message\Header;
 use Everlution\EmailBundle\Inbound\Message\InboundMessage;
+use Everlution\EmailBundle\Message\IdentifiableMessage;
 use Everlution\EmailBundle\Relationship\ReplyableMessage;
 use Everlution\EmailBundle\Message\Recipient\Recipient;
 
 /**
  * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableInboundMessage")
- * @ORM\Table(name="email_inbound", indexes={@ORM\Index(name="message_idx", columns={"message_id"})})
+ * @ORM\Table(name="email_inbound", indexes={
+ *          @ORM\Index(name="message_idx", columns={"message_id"})
+ *      })
  */
 class StorableInboundMessage implements ReplyableMessage
 {
 
     /**
+     * @var int
+     *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -32,7 +37,6 @@ class StorableInboundMessage implements ReplyableMessage
 
     /**
      * @var string
-     *
      * @ORM\Column(name="in_reply_to", type="string", length=255, nullable=true)
      */
     protected $inReplyTo;
@@ -75,14 +79,14 @@ class StorableInboundMessage implements ReplyableMessage
     /**
      * @var string
      *
-     * @ORM\Column(name="html", type="string", nullable=true)
+     * @ORM\Column(name="html", type="text", nullable=true)
      */
     protected $html;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="text", type="string", nullable=true)
+     * @ORM\Column(name="text", type="text", nullable=true)
      */
     protected $text;
 
@@ -128,7 +132,7 @@ class StorableInboundMessage implements ReplyableMessage
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -361,6 +365,15 @@ class StorableInboundMessage implements ReplyableMessage
         $this->deliveredAt = $deliveredAt;
 
         return $this;
+    }
+
+    /**
+     * @param IdentifiableMessage $message
+     * @return bool
+     */
+    public function isReplyTo(IdentifiableMessage $message)
+    {
+        return ($this->inReplyTo === $message->getMessageId());
     }
 
 }

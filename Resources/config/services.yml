@@ -2,6 +2,9 @@ services:
 
     everlution.email.message_relationship_manager:
         class: Everlution\EmailBundle\Relationship\MessageRelationshipManager
+        arguments:
+            - @everlution.email.inbound.message_repository
+            - @everlution.email.outbound.message_repository
 
 
     # OUTBOUND

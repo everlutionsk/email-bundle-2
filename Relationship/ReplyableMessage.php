@@ -2,13 +2,10 @@
 
 namespace Everlution\EmailBundle\Relationship;
 
-interface ReplyableMessage
-{
+use Everlution\EmailBundle\Message\IdentifiableMessage;
 
-    /**
-     * return $string
-     */
-    public function getMessageId();
+interface ReplyableMessage extends IdentifiableMessage
+{
 
     /**
      * @return string

@@ -10,23 +10,26 @@ use Everlution\EmailBundle\Message\Header;
 use Everlution\EmailBundle\Outbound\Message\UniqueOutboundMessage;
 use Everlution\EmailBundle\Message\Recipient\Recipient;
 use Everlution\EmailBundle\Message\Template\Template;
+use Everlution\EmailBundle\Relationship\ReplyableMessage;
 
 /**
  * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage")
- * @ORM\Table(name="email_outbound", indexes={
- *          @ORM\Index(name="message_idx", columns={"message_id"}),
+ * @ORM\Table(name="email_outbound",indexes={
+ *          @ORM\Index(name="message_idx", columns={"message_id"})
  *      })
  */
-class StorableOutboundMessage
+class StorableOutboundMessage implements ReplyableMessage
 {
 
     /**
+     * @var int
+     *
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @var string
      *
@@ -79,14 +82,14 @@ class StorableOutboundMessage
     /**
      * @var string
      *
-     * @ORM\Column(name="html", type="string", nullable=true)
+     * @ORM\Column(name="html", type="text", nullable=true)
      */
     protected $html;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="text", type="string", nullable=true)
+     * @ORM\Column(name="text", type="text", nullable=true)
      */
     protected $text;
 
@@ -165,13 +168,14 @@ class StorableOutboundMessage
         $this->createdAt = new DateTime('now');
         $this->messagesStatus = new ArrayCollection();
         $this->scheduledSendTime = $scheduledSendTime;
+
+        $this->responses = new ArrayCollection();
     }
 
-
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    protected function getId()
     {
         return $this->id;
     }
