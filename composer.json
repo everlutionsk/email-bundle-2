@@ -1,6 +1,6 @@
 {
   "name": "everlutionsk/email-bundle-2",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Everlution email bundle for Symfony framework",
   "type": "everlution-bundle",
   "keywords": ["email", "symfony", "everlution", "bundle"],
