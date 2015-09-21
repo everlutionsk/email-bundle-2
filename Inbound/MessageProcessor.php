@@ -8,6 +8,7 @@ use Everlution\EmailBundle\Entity\StorableInboundMessage;
 use Everlution\EmailBundle\Entity\Repository\StorableInboundMessage as StorableMessageRepository;
 use Everlution\EmailBundle\Inbound\Message\InboundMessage;
 use Everlution\EmailBundle\Inbound\Message\InboundMessageTransformer;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class MessageProcessor
 {
@@ -21,14 +22,22 @@ class MessageProcessor
     /** @var AttachmentSwapper */
     protected $attachmentSwapper;
 
+    /** @var EventDispatcherInterface */
+    protected $eventDispatcher;
+
     /**
      * @param StorableMessageRepository $storableMessageRepository
      * @param AttachmentSwapper $attachmentSwapper
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(StorableMessageRepository $storableMessageRepository, AttachmentSwapper $attachmentSwapper)
-    {
+    public function __construct(
+        StorableMessageRepository $storableMessageRepository,
+        AttachmentSwapper $attachmentSwapper,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->storableMessageRepository = $storableMessageRepository;
         $this->attachmentSwapper = $attachmentSwapper;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -51,6 +60,8 @@ class MessageProcessor
         $this->storeStorableMessage($storableMessage);
         $this->storeAttachments($message->getAttachments(), $storableMessage);
         $this->storeImages($message->getImages(), $storableMessage);
+
+        $this->dispatchInboundEvent($message, $storableMessage);
     }
 
     /**
@@ -87,6 +98,16 @@ class MessageProcessor
     protected function storeImages(array $images, StorableInboundMessage $storableMessage)
     {
         $this->attachmentSwapper->saveImages($images, $storableMessage);
+    }
+
+    /**
+     * @param InboundMessage $message
+     * @param StorableInboundMessage $storableMessage
+     */
+    protected function dispatchInboundEvent(InboundMessage $message, StorableInboundMessage $storableMessage)
+    {
+        $event = new InboundEvent($message, $storableMessage);
+        $this->eventDispatcher->dispatch('everlution.email.inbound', $event);
     }
 
 }

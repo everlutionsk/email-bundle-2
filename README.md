@@ -149,5 +149,15 @@ $template = new Template('TEMPLATE_NAME', [$parameter]);
 $message->setTemplate($template);
 ```
 
+### Handle Inbound messages
+Inbound messages can be handled by listeners, which listening to ```everlution.email.inbound``` events.
+Events are instances of [InboundEvent](Inbound/InboundEvent) and contains information about [Inbound message](Inbound/Message/InboundMessage) and about
+its [storable version](Entity/StorableInboundMessage), which has been saved into database.
+
+<br>
+
+***Caution**: If application doesn't need to create associations with inbound message in database, then storable version of message should be ignored.*
+
+
 # Supported mail systems
 [**Mandrill**](https://github.com/everlutionsk/MandrillBundle)
