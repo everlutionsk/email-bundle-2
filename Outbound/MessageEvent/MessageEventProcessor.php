@@ -26,23 +26,23 @@ class MessageEventProcessor
      */
     public function changeMessageState(MessageEvent $messageEvent)
     {
-        $messageStatus = $this->findMessageStatusEntity($messageEvent);
+        $storableMessageStatus = $this->findStorableMessageStatus($messageEvent);
 
-        if ($messageStatus === null) {
+        if ($storableMessageStatus === null) {
             throw new InvalidArgumentException('Cannot change MessageStatus. Message not found!');
         }
 
-        $messageStatus->setStatus($messageEvent->getStatus());
-        $messageStatus->setRejectReason($messageEvent->getRejectReason());
+        $storableMessageStatus->setStatus($messageEvent->getStatus());
+        $storableMessageStatus->setRejectReason($messageEvent->getRejectReason());
 
-        $this->messageStatusRepository->save($messageStatus);
+        $this->messageStatusRepository->save($storableMessageStatus);
     }
 
     /**
      * @param MessageEvent $messageEvent
      * @return StorableOutboundMessageStatus|null
      */
-    private function findMessageStatusEntity(MessageEvent $messageEvent)
+    protected function findStorableMessageStatus(MessageEvent $messageEvent)
     {
         $mailSystemName = $messageEvent->getMailSystemName();
         $mailSystemMessageId = $messageEvent->getMailSystemMessageId();
