@@ -1,5 +1,6 @@
 {
   "name": "everlutionsk/email-bundle-2",
+  "license": "MIT",
   "version": "1.0.0",
   "description": "Everlution email bundle for Symfony framework",
   "type": "everlution-bundle",
