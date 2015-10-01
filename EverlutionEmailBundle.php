@@ -5,10 +5,6 @@ namespace Everlution\EmailBundle;
 use Doctrine\DBAL\Types\Type;
 use Everlution\EmailBundle\DependencyInjection\Compiler\InboundMessageProcessorCompilerPass;
 use Everlution\EmailBundle\DependencyInjection\Compiler\MailerCompilerPass;
-use Everlution\EmailBundle\Doctrine\Type\HeadersType;
-use Everlution\EmailBundle\Doctrine\Type\RecipientsType;
-use Everlution\EmailBundle\Doctrine\Type\RecipientType;
-use Everlution\EmailBundle\Doctrine\Type\TemplateType;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -40,10 +36,10 @@ class EverlutionEmailBundle extends Bundle
 
     protected function registerCustomDoctrineTypes()
     {
-        Type::addType('emailRecipient', RecipientType::class);
-        Type::addType('emailRecipients', RecipientsType::class);
-        Type::addType('emailHeaders', HeadersType::class);
-        Type::addType('emailTemplate', TemplateType::class);
+        Type::addType('emailRecipient', 'Everlution\EmailBundle\Doctrine\Type\RecipientType');
+        Type::addType('emailRecipients', 'Everlution\EmailBundle\Doctrine\Type\RecipientsType');
+        Type::addType('emailHeaders', 'Everlution\EmailBundle\Doctrine\Type\HeadersType');
+        Type::addType('emailTemplate', 'Everlution\EmailBundle\Doctrine\Type\TemplateType');
     }
 
 }
