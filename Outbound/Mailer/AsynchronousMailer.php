@@ -15,10 +15,10 @@ class AsynchronousMailer extends StorableMessagesMailer
 {
 
     /** @var ProcessedMessage[] */
-    protected $delayedMessages;
+    protected $delayedMessages = [];
 
     /** @var ProcessedMessage[] */
-    protected $delayedSchedules;
+    protected $delayedSchedules = [];
 
     /**
      * @param Stream $asyncHandlingLauncher
