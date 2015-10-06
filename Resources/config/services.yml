@@ -56,6 +56,14 @@ services:
         tags:
             - {name: kernel.event_listener, event: kernel.terminate, method: add}
 
+    everlution.email.outbound.recipient_enforcer:
+            class: Everlution\EmailBundle\Support\RecipientEnforcer
+            public: false
+            arguments:
+                - %everlution.email.ext.enforced_delivery_address%
+            tags:
+                - { name: everlution.email.outbound.message_transformer }
+
 
     # INBOUND
 

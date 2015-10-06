@@ -48,6 +48,8 @@ class EverlutionEmailExtension extends Extension
         $container->setAlias('everlution.email.ext.outbound.attachment_swapper', $processedConfig['attachment_swappers']['outbound']);
         $container->setAlias('everlution.email.ext.inbound.attachment_swapper', $processedConfig['attachment_swappers']['inbound']);
 
+        $container->setParameter('everlution.email.ext.enforced_delivery_address', $processedConfig['enforced_delivery_address']);
+
         $this->defineMessageIdService($container, $processedConfig);
     }
 

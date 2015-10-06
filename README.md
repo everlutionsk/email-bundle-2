@@ -42,6 +42,7 @@ doctrine:
 # EmailBundle Configuration
 everlution_email:
     domain_name: APP_DOMAIN
+    enforced_delivery_address: EMAIL_ADDRESS|NULL
     mail_system: Implementation of Outbound\MailSystem\MailSystem
     async_stream: Implementation of Support\Stream\Stream
     attachment_swappers:
@@ -53,6 +54,8 @@ everlution_email:
 ```
 
 **mail_system** - Name of service, which will be used for sending email messages. This service usually comunicate with SMTP server or with some transactional email platform like [Mandrill](https://www.mandrill.com/).
+
+**enforced_delivery_address** - [Optional] Email address, which will be used to override recipient address in every outbound message.
 
 **async_stream** - Bundle allows to send email messages asynchronously. Email messages is stored in memory unil some value is added into this Stream. Good example is a Stream of Symfony's [kernel.terminate](http://symfony.com/doc/current/components/http_kernel/introduction.html#the-kernel-terminate-event) events.
 
