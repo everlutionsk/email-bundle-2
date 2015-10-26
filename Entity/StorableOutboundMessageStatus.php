@@ -27,7 +27,7 @@ class StorableOutboundMessageStatus
     /**
      * @var StorableOutboundMessage
      *
-     * @ORM\ManyToOne(targetEntity="StorableOutboundMessage", inversedBy="messagesStatus")
+     * @ORM\ManyToOne(targetEntity="StorableOutboundMessage", inversedBy="messagesStatus", cascade={"persist"})
      * @ORM\JoinColumn(name="email_outbound_id", referencedColumnName="id", nullable=false)
      **/
     protected $storableOutboundMessage;
