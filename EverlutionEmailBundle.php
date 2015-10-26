@@ -31,15 +31,26 @@ class EverlutionEmailBundle extends Bundle
      */
     public function boot()
     {
-        $this->registerCustomDoctrineTypes();
+        $this->tryToRegisterCustomDoctrineTypes();
     }
 
-    protected function registerCustomDoctrineTypes()
+    protected function tryToRegisterCustomDoctrineTypes()
     {
-        Type::addType('emailRecipient', 'Everlution\EmailBundle\Doctrine\Type\RecipientType');
-        Type::addType('emailRecipients', 'Everlution\EmailBundle\Doctrine\Type\RecipientsType');
-        Type::addType('emailHeaders', 'Everlution\EmailBundle\Doctrine\Type\HeadersType');
-        Type::addType('emailTemplate', 'Everlution\EmailBundle\Doctrine\Type\TemplateType');
+        if (!Type::hasType('emailRecipient')) {
+            Type::addType('emailRecipient', 'Everlution\EmailBundle\Doctrine\Type\RecipientType');
+        }
+
+        if (!Type::hasType('emailRecipients')) {
+            Type::addType('emailRecipients', 'Everlution\EmailBundle\Doctrine\Type\RecipientsType');
+        }
+
+        if (!Type::hasType('emailHeaders')) {
+            Type::addType('emailHeaders', 'Everlution\EmailBundle\Doctrine\Type\HeadersType');
+        }
+
+        if (!Type::hasType('emailTemplate')) {
+            Type::addType('emailTemplate', 'Everlution\EmailBundle\Doctrine\Type\TemplateType');
+        }
     }
 
 }
