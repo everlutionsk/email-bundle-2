@@ -15,7 +15,6 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class EverlutionEmailExtension extends Extension
 {
-
     /**
      * Loads a specific configuration.
      *
@@ -39,16 +38,27 @@ class EverlutionEmailExtension extends Extension
 
     private function defineServices(ContainerBuilder $container, array $processedConfig)
     {
-        $container->setAlias('everlution.email.ext.mail_system', $processedConfig['mail_system']);
-        $container->setAlias('everlution.email.ext.async_stream', $processedConfig['async_stream']);
+        foreach (
+            [
+                'everlution.email.ext.mail_system' => $processedConfig['mail_system'],
+                'everlution.email.ext.async_stream' => $processedConfig['async_stream'],
+                'everlution.email.ext.outbound.message_event.request_processor' => $processedConfig['request_processors']['outbound_message_event'],
+                'everlution.email.ext.inbound.request_processor' => $processedConfig['request_processors']['inbound'],
+                'everlution.email.ext.outbound.attachment_swapper' => $processedConfig['attachment_swappers']['outbound'],
+                'everlution.email.ext.inbound.attachment_swapper' => $processedConfig['attachment_swappers']['inbound'],
+            ] as $alias => $definition
+        ) {
+            if ($container->hasDefinition($definition)) {
+                $container->setAlias($alias, $definition);
+            }
+        }
 
-        $container->setAlias('everlution.email.ext.outbound.message_event.request_processor', $processedConfig['request_processors']['outbound_message_event']);
-        $container->setAlias('everlution.email.ext.inbound.request_processor', $processedConfig['request_processors']['inbound']);
-
-        $container->setAlias('everlution.email.ext.outbound.attachment_swapper', $processedConfig['attachment_swappers']['outbound']);
-        $container->setAlias('everlution.email.ext.inbound.attachment_swapper', $processedConfig['attachment_swappers']['inbound']);
-
-        $container->setParameter('everlution.email.ext.enforced_delivery_address', $processedConfig['enforced_delivery_address']);
+        if ($container->hasDefinition($processedConfig['enforced_delivery_address'])) {
+            $container->setAlias(
+                'everlution.email.ext.enforced_delivery_address',
+                $processedConfig['enforced_delivery_address']
+            );
+        }
 
         $this->defineMessageIdService($container, $processedConfig);
     }
@@ -67,5 +77,4 @@ class EverlutionEmailExtension extends Extension
             $container->setDefinition($serviceName, $definition);
         }
     }
-
 }
