@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class MailerCompilerPass implements CompilerPassInterface
+class InboundMessageProcessorCompilerPass implements CompilerPassInterface
 {
     /**
      * You can modify the container here before it is dumped to PHP code.
@@ -18,31 +18,28 @@ class MailerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if ($container->hasDefinition('everlution.email.outbound.synchronous_mailer')) {
-            $this->registerOutboundMessageTransformers(
+        if ($container->hasDefinition('everlution.email.inbound.message_processor')) {
+            $this->registerInboundMessageTransformers(
                 $container,
-                $container->getDefinition('everlution.email.outbound.synchronous_mailer')
-            );
-        }
-
-        if ($container->hasDefinition('everlution.email.outbound.asynchronous_mailer')) {
-            $this->registerOutboundMessageTransformers(
-                $container,
-                $container->getDefinition('everlution.email.outbound.asynchronous_mailer')
+                $container->getDefinition(
+                    'everlution.email.inbound.message_processor'
+                )
             );
         }
     }
 
     /**
      * @param ContainerBuilder $container
-     * @param Definition $mailerDefinition
+     * @param Definition       $messageProcessorDefinition
      */
-    protected function registerOutboundMessageTransformers(ContainerBuilder $container, Definition $mailerDefinition)
-    {
-        $transformerTag = 'everlution.email.outbound.message_transformer';
+    protected function registerInboundMessageTransformers(
+        ContainerBuilder $container,
+        Definition $messageProcessorDefinition
+    ) {
+        $transformerTag = 'everlution.email.inbound.message_transformer';
 
         foreach ($container->findTaggedServiceIds($transformerTag) as $id => $attributes) {
-            $mailerDefinition->addMethodCall('addMessageTransformer', array(new Reference($id)));
+            $messageProcessorDefinition->addMethodCall('addMessageTransformer', array(new Reference($id)));
         }
     }
 }
