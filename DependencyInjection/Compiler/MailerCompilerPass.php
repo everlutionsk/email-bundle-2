@@ -9,7 +9,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class MailerCompilerPass implements CompilerPassInterface
 {
-
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
@@ -19,8 +18,19 @@ class MailerCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $this->registerOutboundMessageTransformers($container, $container->getDefinition('everlution.email.outbound.synchronous_mailer'));
-        $this->registerOutboundMessageTransformers($container, $container->getDefinition('everlution.email.outbound.asynchronous_mailer'));
+        if ($container->hasDefinition('everlution.email.outbound.synchronous_mailer')) {
+            $this->registerOutboundMessageTransformers(
+                $container,
+                $container->getDefinition('everlution.email.outbound.synchronous_mailer')
+            );
+        }
+
+        if ($container->hasDefinition('everlution.email.outbound.asynchronous_mailer')) {
+            $this->registerOutboundMessageTransformers(
+                $container,
+                $container->getDefinition('everlution.email.outbound.asynchronous_mailer')
+            );
+        }
     }
 
     /**
@@ -35,5 +45,4 @@ class MailerCompilerPass implements CompilerPassInterface
             $mailerDefinition->addMethodCall('addMessageTransformer', array(new Reference($id)));
         }
     }
-
 }

@@ -9,7 +9,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class InboundMessageProcessorCompilerPass implements CompilerPassInterface
 {
-
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
@@ -19,20 +18,28 @@ class InboundMessageProcessorCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $this->registerInboundMessageTransformers($container, $container->getDefinition('everlution.email.inbound.message_processor'));
+        if ($container->hasDefinition('everlution.email.inbound.message_processor')) {
+            $this->registerInboundMessageTransformers(
+                $container,
+                $container->getDefinition(
+                    'everlution.email.inbound.message_processor'
+                )
+            );
+        }
     }
 
     /**
      * @param ContainerBuilder $container
-     * @param Definition $messageProcessorDefinition
+     * @param Definition       $messageProcessorDefinition
      */
-    protected function registerInboundMessageTransformers(ContainerBuilder $container, Definition $messageProcessorDefinition)
-    {
+    protected function registerInboundMessageTransformers(
+        ContainerBuilder $container,
+        Definition $messageProcessorDefinition
+    ) {
         $transformerTag = 'everlution.email.inbound.message_transformer';
 
         foreach ($container->findTaggedServiceIds($transformerTag) as $id => $attributes) {
             $messageProcessorDefinition->addMethodCall('addMessageTransformer', array(new Reference($id)));
         }
     }
-
 }

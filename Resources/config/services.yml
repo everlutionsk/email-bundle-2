@@ -1,88 +1,39 @@
 services:
 
-    everlution.email.message_relationship_manager:
-        class: Everlution\EmailBundle\Relationship\MessageRelationshipManager
-        arguments:
-            - @everlution.email.inbound.message_repository
-            - @everlution.email.outbound.message_repository
-
+    everlution.mandrill.request_signature_generator:
+        class: Everlution\MandrillBundle\Support\RequestSignatureGenerator
+        public: false
 
     # OUTBOUND
 
-    everlution.email.outbound.synchronous_mailer:
-        class: Everlution\EmailBundle\Outbound\Mailer\SynchronousMailer
+    everlution.mandrill.mail_system:
+        class: Everlution\MandrillBundle\Outbound\MailSystem\MailSystem
         arguments:
-            - @everlution.email.ext.message_id_generator
-            - @everlution.email.ext.mail_system
-            - @doctrine.orm.entity_manager
-            - @everlution.email.ext.outbound.attachment_swapper
+            - "%everlution.mandrill.api_key%"
+            - "%everlution.mandrill.async_mandrill_sending%"
+            - "@everlution.mandrill.outbound.message_converter"
+            - "@everlution.mandrill.outbound.transparent_recipient_enforcer"
 
-    everlution.email.outbound.asynchronous_mailer:
-        class: Everlution\EmailBundle\Outbound\Mailer\AsynchronousMailer
+    everlution.mandrill.outbound.message_converter:
+        class: Everlution\MandrillBundle\Outbound\MailSystem\MessageConverter
+        public: false
+
+    everlution.mandrill.outbound.message_event.request_processor:
+        class: Everlution\MandrillBundle\Outbound\MessageEvent\RequestProcessor
         arguments:
-            - @everlution.email.ext.async_stream
-            - @everlution.email.ext.message_id_generator
-            - @everlution.email.ext.mail_system
-            - @doctrine.orm.entity_manager
-            - @everlution.email.ext.outbound.attachment_swapper
+            - "@everlution.mandrill.request_signature_generator"
+            - "KEY" #TODO: Real Webhook key
 
-    everlution.email.outbound.message_event.controller:
-        class: Everlution\EmailBundle\Controller\MessageEventController
-        arguments:
-            - @everlution.email.ext.outbound.message_event.request_processor
-            - @everlution.email.outbound.message_event.processor
-
-    everlution.email.outbound.message_event.processor:
-        class: Everlution\EmailBundle\Outbound\MessageEvent\MessageEventProcessor
-        arguments:
-            - @everlution.email.outbound.message_status_repository
-
-    everlution.email.outbound.message_repository:
-        class: Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage
-        factory_service: doctrine.orm.default_entity_manager
-        factory_method: getRepository
-        arguments:
-            - Everlution\EmailBundle\Entity\StorableOutboundMessage
-
-    everlution.email.outbound.message_status_repository:
-        class: Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageStatus
-        factory_service: doctrine.orm.default_entity_manager
-        factory_method: getRepository
-        arguments:
-            - Everlution\EmailBundle\Entity\StorableOutboundMessageStatus
-
-    everlution.email.stream.kernel_terminate:
-        class: Everlution\EmailBundle\Support\Stream\BroadcastStream
-        tags:
-            - {name: kernel.event_listener, event: kernel.terminate, method: add}
-
-    everlution.email.outbound.recipient_enforcer:
-            class: Everlution\EmailBundle\Support\RecipientEnforcer
+    everlution.mandrill.outbound.transparent_recipient_enforcer:
+            class: Everlution\MandrillBundle\Outbound\MailSystem\TransparentRecipientEnforcer
             public: false
             arguments:
-                - %everlution.email.ext.enforced_delivery_address%
-            tags:
-                - { name: everlution.email.outbound.message_transformer }
-
+                - %everlution.mandrill.enforced_delivery_address%
 
     # INBOUND
 
-    everlution.email.inbound.controller:
-        class: Everlution\EmailBundle\Controller\InboundController
+    everlution.mandrill.inbound.request_processor:
+        class: Everlution\MandrillBundle\Inbound\RequestProcessor
         arguments:
-            - @everlution.email.ext.inbound.request_processor
-            - @everlution.email.inbound.message_processor
-
-    everlution.email.inbound.message_processor:
-        class: Everlution\EmailBundle\Inbound\MessageProcessor
-        arguments:
-            - @everlution.email.inbound.message_repository
-            - @everlution.email.ext.inbound.attachment_swapper
-            - @event_dispatcher
-
-    everlution.email.inbound.message_repository:
-        class: Everlution\EmailBundle\Entity\Repository\StorableInboundMessage
-        factory_service: doctrine.orm.default_entity_manager
-        factory_method: getRepository
-        arguments:
-            - Everlution\EmailBundle\Entity\StorableInboundMessage
+            - "@everlution.mandrill.request_signature_generator"
+            - "KEY" #TODO: Real Webhook key
