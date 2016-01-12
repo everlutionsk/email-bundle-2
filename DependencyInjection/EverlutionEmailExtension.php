@@ -53,12 +53,7 @@ class EverlutionEmailExtension extends Extension
             }
         }
 
-        if ($container->hasDefinition($processedConfig['enforced_delivery_address'])) {
-            $container->setAlias(
-                'everlution.email.ext.enforced_delivery_address',
-                $processedConfig['enforced_delivery_address']
-            );
-        }
+        $container->setParameter('everlution.email.ext.enforced_delivery_address', $processedConfig['enforced_delivery_address']);
 
         $this->defineMessageIdService($container, $processedConfig);
     }
