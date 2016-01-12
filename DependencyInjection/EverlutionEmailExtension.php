@@ -48,9 +48,7 @@ class EverlutionEmailExtension extends Extension
                 'everlution.email.ext.inbound.attachment_swapper' => $processedConfig['attachment_swappers']['inbound'],
             ] as $alias => $definition
         ) {
-            if ($container->hasDefinition($definition)) {
-                $container->setAlias($alias, $definition);
-            }
+            $container->setAlias($alias, $definition);
         }
 
         $container->setParameter('everlution.email.ext.enforced_delivery_address', $processedConfig['enforced_delivery_address']);
