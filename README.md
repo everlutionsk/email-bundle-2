@@ -162,5 +162,8 @@ its [storable version](Entity/StorableInboundMessage), which has been saved into
 ***Caution**: If application doesn't need to create associations with inbound message in database, then storable version of message should be ignored.*
 
 
+### Mock a file system
+Use ```everlution.email.mock.file_system``` service as mail system (see *Configure the bundle* section).
+
 # Supported mail systems
 [**Mandrill**](https://github.com/everlutionsk/MandrillBundle)

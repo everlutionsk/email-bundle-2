@@ -86,3 +86,9 @@ services:
         factory_method: getRepository
         arguments:
             - Everlution\EmailBundle\Entity\StorableInboundMessage
+
+
+    # MOCK
+
+    everlution.email.mock.mail_system:
+        class: Everlution\EmailBundle\Mock\Outbound\MailSystem\MailSystem
