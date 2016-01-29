@@ -3,8 +3,8 @@ services:
     everlution.email.message_relationship_manager:
         class: Everlution\EmailBundle\Relationship\MessageRelationshipManager
         arguments:
-            - @everlution.email.inbound.message_repository
-            - @everlution.email.outbound.message_repository
+            - "@everlution.email.inbound.message_repository"
+            - "@everlution.email.outbound.message_repository"
 
 
     # OUTBOUND
@@ -12,30 +12,30 @@ services:
     everlution.email.outbound.synchronous_mailer:
         class: Everlution\EmailBundle\Outbound\Mailer\SynchronousMailer
         arguments:
-            - @everlution.email.ext.message_id_generator
-            - @everlution.email.ext.mail_system
-            - @doctrine.orm.entity_manager
-            - @everlution.email.ext.outbound.attachment_swapper
+            - "@everlution.email.ext.message_id_generator"
+            - "@everlution.email.ext.mail_system"
+            - "@doctrine.orm.entity_manager"
+            - "@everlution.email.ext.outbound.attachment_swapper"
 
     everlution.email.outbound.asynchronous_mailer:
         class: Everlution\EmailBundle\Outbound\Mailer\AsynchronousMailer
         arguments:
-            - @everlution.email.ext.async_stream
-            - @everlution.email.ext.message_id_generator
-            - @everlution.email.ext.mail_system
-            - @doctrine.orm.entity_manager
-            - @everlution.email.ext.outbound.attachment_swapper
+            - "@everlution.email.ext.async_stream"
+            - "@everlution.email.ext.message_id_generator"
+            - "@everlution.email.ext.mail_system"
+            - "@doctrine.orm.entity_manager"
+            - "@everlution.email.ext.outbound.attachment_swapper"
 
     everlution.email.outbound.message_event.controller:
         class: Everlution\EmailBundle\Controller\MessageEventController
         arguments:
-            - @everlution.email.ext.outbound.message_event.request_processor
-            - @everlution.email.outbound.message_event.processor
+            - "@everlution.email.ext.outbound.message_event.request_processor"
+            - "@everlution.email.outbound.message_event.processor"
 
     everlution.email.outbound.message_event.processor:
         class: Everlution\EmailBundle\Outbound\MessageEvent\MessageEventProcessor
         arguments:
-            - @everlution.email.outbound.message_status_repository
+            - "@everlution.email.outbound.message_status_repository"
 
     everlution.email.outbound.message_repository:
         class: Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage
@@ -60,7 +60,7 @@ services:
             class: Everlution\EmailBundle\Support\RecipientEnforcer
             public: false
             arguments:
-                - %everlution.email.ext.enforced_delivery_address%
+                - "%everlution.email.ext.enforced_delivery_address%"
             tags:
                 - { name: everlution.email.outbound.message_transformer }
 
@@ -70,15 +70,15 @@ services:
     everlution.email.inbound.controller:
         class: Everlution\EmailBundle\Controller\InboundController
         arguments:
-            - @everlution.email.ext.inbound.request_processor
-            - @everlution.email.inbound.message_processor
+            - "@everlution.email.ext.inbound.request_processor"
+            - "@everlution.email.inbound.message_processor"
 
     everlution.email.inbound.message_processor:
         class: Everlution\EmailBundle\Inbound\MessageProcessor
         arguments:
-            - @everlution.email.inbound.message_repository
-            - @everlution.email.ext.inbound.attachment_swapper
-            - @event_dispatcher
+            - "@everlution.email.inbound.message_repository"
+            - "@everlution.email.ext.inbound.attachment_swapper"
+            - "@event_dispatcher"
 
     everlution.email.inbound.message_repository:
         class: Everlution\EmailBundle\Entity\Repository\StorableInboundMessage
