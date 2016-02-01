@@ -58,8 +58,14 @@ class MessageProcessor
         $storableMessage = new StorableInboundMessage($message);
 
         $this->storeStorableMessage($storableMessage);
-        $this->storeAttachments($message->getAttachments(), $storableMessage);
-        $this->storeImages($message->getImages(), $storableMessage);
+
+        if ($message->getAttachments()) {
+            $this->storeAttachments($message->getAttachments(), $storableMessage);
+        }
+
+        if ($message->getImages()) {
+            $this->storeImages($message->getImages(), $storableMessage);
+        }
 
         $this->dispatchInboundEvent($message, $storableMessage);
     }

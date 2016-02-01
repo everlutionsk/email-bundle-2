@@ -25,7 +25,7 @@ abstract class StorableMessagesMailer extends Mailer
      * @param EntityManagerInterface $entityManager
      * @param AttachmentSwapper $attachmentSwapper
      */
-    public function __construct(MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem, EntityManagerInterface $entityManager, AttachmentSwapper $attachmentSwapper)
+    public function __construct(MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem, EntityManagerInterface $entityManager, AttachmentSwapper $attachmentSwapper = null)
     {
         parent::__construct($messageIdGenerator, $mailSystem);
         $this->attachmentSwapper = $attachmentSwapper;
@@ -50,6 +50,11 @@ abstract class StorableMessagesMailer extends Mailer
     protected function storeAttachments(ProcessedOutboundMessage $processedMessage)
     {
         $attachments = $processedMessage->getUniqueOutboundMessage()->getMessage()->getAttachments();
+
+        if (!$attachments) {
+            return;
+        }
+
         $storableMessage = $processedMessage->getStorableMessage();
 
         $this->attachmentSwapper->saveAttachments($attachments, $storableMessage);
@@ -61,6 +66,11 @@ abstract class StorableMessagesMailer extends Mailer
     protected function storeImages(ProcessedOutboundMessage $processedMessage)
     {
         $attachments = $processedMessage->getUniqueOutboundMessage()->getMessage()->getImages();
+
+        if (!$attachments) {
+            return;
+        }
+
         $storableMessage = $processedMessage->getStorableMessage();
 
         $this->attachmentSwapper->saveImages($attachments, $storableMessage);
