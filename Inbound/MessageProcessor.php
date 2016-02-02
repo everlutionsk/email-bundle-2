@@ -59,11 +59,8 @@ class MessageProcessor
 
         $this->storeStorableMessage($storableMessage);
 
-        if ($message->getAttachments()) {
+        if ($this->attachmentSwapper) {
             $this->storeAttachments($message->getAttachments(), $storableMessage);
-        }
-
-        if ($message->getImages()) {
             $this->storeImages($message->getImages(), $storableMessage);
         }
 

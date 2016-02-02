@@ -50,11 +50,6 @@ abstract class StorableMessagesMailer extends Mailer
     protected function storeAttachments(ProcessedOutboundMessage $processedMessage)
     {
         $attachments = $processedMessage->getUniqueOutboundMessage()->getMessage()->getAttachments();
-
-        if (!$attachments) {
-            return;
-        }
-
         $storableMessage = $processedMessage->getStorableMessage();
 
         $this->attachmentSwapper->saveAttachments($attachments, $storableMessage);
@@ -66,11 +61,6 @@ abstract class StorableMessagesMailer extends Mailer
     protected function storeImages(ProcessedOutboundMessage $processedMessage)
     {
         $attachments = $processedMessage->getUniqueOutboundMessage()->getMessage()->getImages();
-
-        if (!$attachments) {
-            return;
-        }
-
         $storableMessage = $processedMessage->getStorableMessage();
 
         $this->attachmentSwapper->saveImages($attachments, $storableMessage);
