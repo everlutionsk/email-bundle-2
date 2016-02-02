@@ -40,8 +40,10 @@ abstract class StorableMessagesMailer extends Mailer
         $this->entityManager->persist($processedMessage->getStorableMessage());
         $this->entityManager->flush();
 
-        $this->storeAttachments($processedMessage);
-        $this->storeImages($processedMessage);
+        if ($this->attachmentSwapper) {
+            $this->storeAttachments($processedMessage);
+            $this->storeImages($processedMessage);
+        }
     }
 
     /**
