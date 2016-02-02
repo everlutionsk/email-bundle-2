@@ -77,7 +77,7 @@ services:
         class: Everlution\EmailBundle\Inbound\MessageProcessor
         arguments:
             - "@everlution.email.inbound.message_repository"
-            - "@everlution.email.ext.inbound.attachment_swapper"
+            - "@?everlution.email.ext.inbound.attachment_swapper"
             - "@event_dispatcher"
 
     everlution.email.inbound.message_repository:
