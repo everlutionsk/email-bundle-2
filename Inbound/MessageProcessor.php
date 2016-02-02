@@ -32,7 +32,7 @@ class MessageProcessor
      */
     public function __construct(
         StorableMessageRepository $storableMessageRepository,
-        AttachmentSwapper $attachmentSwapper,
+        AttachmentSwapper $attachmentSwapper = null,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->storableMessageRepository = $storableMessageRepository;
@@ -58,8 +58,11 @@ class MessageProcessor
         $storableMessage = new StorableInboundMessage($message);
 
         $this->storeStorableMessage($storableMessage);
-        $this->storeAttachments($message->getAttachments(), $storableMessage);
-        $this->storeImages($message->getImages(), $storableMessage);
+
+        if ($this->attachmentSwapper) {
+            $this->storeAttachments($message->getAttachments(), $storableMessage);
+            $this->storeImages($message->getImages(), $storableMessage);
+        }
 
         $this->dispatchInboundEvent($message, $storableMessage);
     }

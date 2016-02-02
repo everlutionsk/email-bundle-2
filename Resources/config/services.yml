@@ -15,7 +15,7 @@ services:
             - "@everlution.email.ext.message_id_generator"
             - "@everlution.email.ext.mail_system"
             - "@doctrine.orm.entity_manager"
-            - "@everlution.email.ext.outbound.attachment_swapper"
+            - "@?everlution.email.ext.outbound.attachment_swapper"
 
     everlution.email.outbound.asynchronous_mailer:
         class: Everlution\EmailBundle\Outbound\Mailer\AsynchronousMailer
@@ -24,7 +24,7 @@ services:
             - "@everlution.email.ext.message_id_generator"
             - "@everlution.email.ext.mail_system"
             - "@doctrine.orm.entity_manager"
-            - "@everlution.email.ext.outbound.attachment_swapper"
+            - "@?everlution.email.ext.outbound.attachment_swapper"
 
     everlution.email.outbound.message_event.controller:
         class: Everlution\EmailBundle\Controller\MessageEventController
@@ -77,7 +77,7 @@ services:
         class: Everlution\EmailBundle\Inbound\MessageProcessor
         arguments:
             - "@everlution.email.inbound.message_repository"
-            - "@everlution.email.ext.inbound.attachment_swapper"
+            - "@?everlution.email.ext.inbound.attachment_swapper"
             - "@event_dispatcher"
 
     everlution.email.inbound.message_repository:

@@ -45,8 +45,13 @@ class EverlutionEmailExtension extends Extension
         $container->setAlias('everlution.email.ext.outbound.message_event.request_processor', $processedConfig['request_processors']['outbound_message_event']);
         $container->setAlias('everlution.email.ext.inbound.request_processor', $processedConfig['request_processors']['inbound']);
 
-        $container->setAlias('everlution.email.ext.outbound.attachment_swapper', $processedConfig['attachment_swappers']['outbound']);
-        $container->setAlias('everlution.email.ext.inbound.attachment_swapper', $processedConfig['attachment_swappers']['inbound']);
+        if (isset($processedConfig['attachment_swappers']['outbound'])) {
+            $container->setAlias('everlution.email.ext.outbound.attachment_swapper', $processedConfig['attachment_swappers']['outbound']);
+        }
+
+        if (isset($processedConfig['attachment_swappers']['inbound'])) {
+            $container->setAlias('everlution.email.ext.inbound.attachment_swapper', $processedConfig['attachment_swappers']['inbound']);
+        }
 
         $container->setParameter('everlution.email.ext.enforced_delivery_address', $processedConfig['enforced_delivery_address']);
 
