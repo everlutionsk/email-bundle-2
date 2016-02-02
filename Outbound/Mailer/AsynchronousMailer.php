@@ -27,7 +27,7 @@ class AsynchronousMailer extends StorableMessagesMailer
      * @param EntityManagerInterface $entityManager
      * @param AttachmentSwapper $attachmentSwapper
      */
-    public function __construct(Stream $asyncHandlingLauncher, MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem, EntityManagerInterface $entityManager, AttachmentSwapper $attachmentSwapper)
+    public function __construct(Stream $asyncHandlingLauncher, MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem, EntityManagerInterface $entityManager, AttachmentSwapper $attachmentSwapper = null)
     {
         parent::__construct($messageIdGenerator, $mailSystem, $entityManager, $attachmentSwapper);
         $this->registerStreamListener($asyncHandlingLauncher);
