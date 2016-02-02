@@ -32,7 +32,7 @@ class MessageProcessor
      */
     public function __construct(
         StorableMessageRepository $storableMessageRepository,
-        AttachmentSwapper $attachmentSwapper,
+        AttachmentSwapper $attachmentSwapper = null,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->storableMessageRepository = $storableMessageRepository;
