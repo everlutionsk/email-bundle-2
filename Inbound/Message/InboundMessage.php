@@ -59,10 +59,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param string $messageId
+     * @return $this
      */
     public function setMessageId($messageId)
     {
         $this->messageId = $messageId;
+
+        return $this;
     }
 
     /**
@@ -75,10 +78,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param string $fromName
+     * @return $this
      */
     public function setFromName($fromName)
     {
         $this->fromName = $fromName;
+
+        return $this;
     }
 
     /**
@@ -91,10 +97,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param string $fromEmail
+     * @return $this
      */
     public function setFromEmail($fromEmail)
     {
         $this->fromEmail = $fromEmail;
+
+        return $this;
     }
 
     /**
@@ -107,10 +116,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param string $replyTo
+     * @return $this
      */
     public function setReplyTo($replyTo)
     {
         $this->replyTo = $replyTo;
+
+        return $this;
     }
 
     /**
@@ -123,10 +135,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param string $subject
+     * @return $this
      */
     public function setSubject($subject)
     {
         $this->subject = $subject;
+
+        return $this;
     }
 
     /**
@@ -139,10 +154,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param Recipient[] $recipients
+     * @return $this
      */
     public function setRecipients(array $recipients)
     {
         $this->recipients = $recipients;
+
+        return $this;
     }
 
     /**
@@ -155,10 +173,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param Header[] $headers
+     * @return $this
      */
     public function setHeaders(array $headers)
     {
         $this->headers = $headers;
+
+        return $this;
     }
 
     /**
@@ -171,10 +192,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param Attachment[] $attachments
+     * @return $this
      */
     public function setAttachments(array $attachments)
     {
         $this->attachments = $attachments;
+
+        return $this;
     }
 
     /**
@@ -187,10 +211,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param Attachment[] $images
+     * @return $this
      */
     public function setImages(array $images)
     {
         $this->images = $images;
+
+        return $this;
     }
 
     /**
@@ -203,10 +230,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param string $text
+     * @return $this
      */
     public function setText($text)
     {
         $this->text = $text;
+
+        return $this;
     }
 
     /**
@@ -219,10 +249,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param string $html
+     * @return $this
      */
     public function setHtml($html)
     {
         $this->html = $html;
+
+        return $this;
     }
 
     /**
@@ -235,10 +268,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param string $inReplyTo
+     * @return $this
      */
     public function setInReplyTo($inReplyTo)
     {
         $this->inReplyTo = $inReplyTo;
+
+        return $this;
     }
 
     /**
@@ -251,10 +287,13 @@ class InboundMessage implements ReplyableMessage
 
     /**
      * @param string $references
+     * @return $this
      */
     public function setReferences($references)
     {
         $this->references = $references;
+
+        return $this;
     }
 
 }

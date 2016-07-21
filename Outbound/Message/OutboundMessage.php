@@ -60,10 +60,13 @@ class OutboundMessage
 
     /**
      * @param string $fromName
+     * @return $this
      */
     public function setFromName($fromName)
     {
         $this->fromName = $fromName;
+
+        return $this;
     }
 
     /**
@@ -76,10 +79,13 @@ class OutboundMessage
 
     /**
      * @param string $fromEmail
+     * @return $this
      */
     public function setFromEmail($fromEmail)
     {
         $this->fromEmail = $fromEmail;
+
+        return $this;
     }
 
     /**
@@ -92,10 +98,13 @@ class OutboundMessage
 
     /**
      * @param string $replyTo
+     * @return $this
      */
     public function setReplyTo($replyTo)
     {
         $this->replyTo = $replyTo;
+
+        return $this;
     }
 
     /**
@@ -108,10 +117,13 @@ class OutboundMessage
 
     /**
      * @param string $subject
+     * @return $this
      */
     public function setSubject($subject)
     {
         $this->subject = $subject;
+
+        return $this;
     }
 
     /**
@@ -124,10 +136,13 @@ class OutboundMessage
 
     /**
      * @param Recipient[] $recipients
+     * @return $this
      */
     public function setRecipients(array $recipients)
     {
         $this->recipients = $recipients;
+
+        return $this;
     }
 
     /**
@@ -140,10 +155,13 @@ class OutboundMessage
 
     /**
      * @param Header[] $customHeaders
+     * @return $this
      */
     public function setCustomHeaders(array $customHeaders)
     {
         $this->customHeaders = $customHeaders;
+
+        return $this;
     }
 
     /**
@@ -156,10 +174,13 @@ class OutboundMessage
 
     /**
      * @param Attachment[] $attachments
+     * @return $this
      */
     public function setAttachments(array $attachments)
     {
         $this->attachments = $attachments;
+
+        return $this;
     }
 
     /**
@@ -172,10 +193,13 @@ class OutboundMessage
 
     /**
      * @param Attachment[] $images
+     * @return $this
      */
     public function setImages(array $images)
     {
         $this->images = $images;
+
+        return $this;
     }
 
     /**
@@ -188,10 +212,13 @@ class OutboundMessage
 
     /**
      * @param string $text
+     * @return $this
      */
     public function setText($text)
     {
         $this->text = $text;
+
+        return $this;
     }
 
     /**
@@ -204,10 +231,13 @@ class OutboundMessage
 
     /**
      * @param string $html
+     * @return $this
      */
     public function setHtml($html)
     {
         $this->html = $html;
+
+        return $this;
     }
 
     /**
@@ -220,10 +250,13 @@ class OutboundMessage
 
     /**
      * @param Template $template
+     * @return $this
      */
     public function setTemplate($template)
     {
         $this->template = $template;
+
+        return $this;
     }
 
     /**
@@ -236,10 +269,13 @@ class OutboundMessage
 
     /**
      * @param string $inReplyTo
+     * @return $this
      */
     public function setInReplyTo($inReplyTo)
     {
         $this->inReplyTo = $inReplyTo;
+
+        return $this;
     }
 
     /**
@@ -252,10 +288,13 @@ class OutboundMessage
 
     /**
      * @param string $references
+     * @return $this
      */
     public function setReferences($references)
     {
         $this->references = $references;
+
+        return $this;
     }
 
 }
