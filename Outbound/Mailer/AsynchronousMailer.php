@@ -27,8 +27,13 @@ class AsynchronousMailer extends StorableMessagesMailer
      * @param EntityManagerInterface $entityManager
      * @param AttachmentSwapper $attachmentSwapper
      */
-    public function __construct(Stream $asyncHandlingLauncher, MessageIdGenerator $messageIdGenerator, MailSystem $mailSystem, EntityManagerInterface $entityManager, AttachmentSwapper $attachmentSwapper = null)
-    {
+    public function __construct(
+        Stream $asyncHandlingLauncher,
+        MessageIdGenerator $messageIdGenerator,
+        MailSystem $mailSystem,
+        EntityManagerInterface $entityManager,
+        AttachmentSwapper $attachmentSwapper = null
+    ) {
         parent::__construct($messageIdGenerator, $mailSystem, $entityManager, $attachmentSwapper);
         $this->registerStreamListener($asyncHandlingLauncher);
     }
@@ -67,10 +72,12 @@ class AsynchronousMailer extends StorableMessagesMailer
      */
     protected function registerStreamListener(Stream $stream)
     {
-        $stream->listen(function($value) {
-            $this->sendDelayedMessages();
-            $this->sendScheduledMessages();
-        });
+        $stream->listen(
+            function ($value) {
+                $this->sendDelayedMessages();
+                $this->sendScheduledMessages();
+            }
+        );
     }
 
     protected function sendDelayedMessages()

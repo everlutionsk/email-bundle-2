@@ -12,8 +12,18 @@ class BaseRepository extends EntityRepository
      */
     public function save($entity)
     {
-        $this->_em->persist($entity);
+        $this->persist($entity);
         $this->_em->flush($entity);
+    }
+
+    public function persist($entity)
+    {
+        $this->_em->persist($entity);
+    }
+
+    public function flushAll()
+    {
+        $this->_em->flush();
     }
 
 }

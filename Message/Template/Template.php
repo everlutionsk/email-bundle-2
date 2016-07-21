@@ -17,6 +17,14 @@ class Template
      */
     public function __construct($name, array $parameters)
     {
+        foreach ($parameters as $parameter) {
+            if (false === $parameter instanceof Parameter) {
+                throw new \InvalidArgumentException(
+                    'All parameters must be instance of Everlution\\EmailBundle\\Message\\Template\\Parameter'
+                );
+            }
+        }
+
         $this->name = $name;
         $this->parameters = $parameters;
     }
