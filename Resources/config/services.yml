@@ -39,15 +39,13 @@ services:
 
     everlution.email.outbound.message_repository:
         class: Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage
-        factory_service: doctrine.orm.default_entity_manager
-        factory_method: getRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments:
             - Everlution\EmailBundle\Entity\StorableOutboundMessage
 
     everlution.email.outbound.message_status_repository:
         class: Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageStatus
-        factory_service: doctrine.orm.default_entity_manager
-        factory_method: getRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments:
             - Everlution\EmailBundle\Entity\StorableOutboundMessageStatus
 
@@ -82,8 +80,7 @@ services:
 
     everlution.email.inbound.message_repository:
         class: Everlution\EmailBundle\Entity\Repository\StorableInboundMessage
-        factory_service: doctrine.orm.default_entity_manager
-        factory_method: getRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments:
             - Everlution\EmailBundle\Entity\StorableInboundMessage
 
