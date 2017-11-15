@@ -62,6 +62,11 @@ class StorableOutboundMessageStatus
     protected $recipient;
 
     /**
+     * @var
+     */
+    protected $resendAttempts;
+
+    /**
      * @var DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)

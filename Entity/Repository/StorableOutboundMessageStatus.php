@@ -27,4 +27,16 @@ class StorableOutboundMessageStatus extends BaseRepository
         return $qb->getQuery()->getSingleResult();
     }
 
+    /**
+     * @return array
+     */
+    public function findAllUndeliveredMessages()
+    {
+        return $this
+            ->createQueryBuilder('i')
+            ->where('i.status = :status')
+            ->setParameter('status', 'failure')
+            ->getQuery()
+            ->getResult();
+    }
 }

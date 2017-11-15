@@ -136,9 +136,16 @@ class StorableOutboundMessage implements ReplyableMessage
     protected $mailSystem;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="resend_attempts", type="integer", nullable=false)
+     */
+    protected $resendAttempts;
+
+    /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="StorableOutboundMessageStatus", mappedBy="storableOutboundMessage", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="StorableOutboundMessageStatus", mappedBy="storableOutboundMessage", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $messagesStatus;
 
@@ -165,6 +172,7 @@ class StorableOutboundMessage implements ReplyableMessage
         $this->customHeaders = $message->getCustomHeaders();
 
         $this->mailSystem = $mailSystemName;
+        $this->resendAttempts = 0;
         $this->createdAt = new DateTime('now');
         $this->messagesStatus = new ArrayCollection();
         $this->scheduledSendTime = $scheduledSendTime;
@@ -466,6 +474,24 @@ class StorableOutboundMessage implements ReplyableMessage
     }
 
     /**
+     * @return int
+     */
+    public function getResendAttempts()
+    {
+        return $this->resendAttempts;
+    }
+
+    /**
+     * @return StorableOutboundMessage
+     */
+    public function incrementResendAttempts()
+    {
+        ++$this->resendAttempts;
+
+        return $this;
+    }
+
+    /**
      * @param StorableOutboundMessageStatus $messageStatus
      */
     public function addMessageStatus(StorableOutboundMessageStatus $messageStatus)
@@ -480,5 +506,18 @@ class StorableOutboundMessage implements ReplyableMessage
     {
         $this->messagesStatus->removeElement($messageStatus);
     }
+
+    /**
+     * @return StorableOutboundMessage
+     */
+    public function clearMessagesStatuses()
+    {
+        if (!$this->messagesStatus->isEmpty()) {
+            $this->messagesStatus->clear();
+        }
+
+        return $this;
+    }
+
 
 }

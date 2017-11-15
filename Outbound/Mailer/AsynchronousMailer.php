@@ -4,6 +4,7 @@ namespace Everlution\EmailBundle\Outbound\Mailer;
 
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Everlution\EmailBundle\Entity\StorableOutboundMessageStatus;
 use Everlution\EmailBundle\Outbound\Attachment\AttachmentSwapper;
 use Everlution\EmailBundle\Outbound\Message\OutboundMessage;
 use Everlution\EmailBundle\Outbound\Message\ProcessedOutboundMessage as ProcessedMessage;
@@ -65,6 +66,11 @@ class AsynchronousMailer extends StorableMessagesMailer
         $this->delayedSchedules[] = $processedMessage;
 
         return $processedMessage;
+    }
+
+    public function resendMessage(StorableOutboundMessageStatus $messageStatus)
+    {
+        // @todo implement
     }
 
     /**

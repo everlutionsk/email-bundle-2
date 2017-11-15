@@ -3,9 +3,12 @@
 namespace Everlution\EmailBundle\Outbound\Mailer;
 
 use DateTime;
+use Everlution\EmailBundle\Entity\StorableOutboundMessageStatus;
+use Everlution\EmailBundle\Outbound\MailSystem\MailSystemResult;
 use Everlution\EmailBundle\Outbound\Message\OutboundMessage;
 use Everlution\EmailBundle\Outbound\Message\ProcessedOutboundMessage;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystemException;
+use Everlution\EmailBundle\Outbound\Message\UniqueOutboundMessage;
 
 class SynchronousMailer extends StorableMessagesMailer
 {
@@ -18,6 +21,7 @@ class SynchronousMailer extends StorableMessagesMailer
     public function sendMessage(OutboundMessage $message)
     {
         $processedMessage = $this->processMessage($message);
+        dump($processedMessage);exit;
 
         $this->sendProcessedMessage($processedMessage);
         $this->storeProcessedMessage($processedMessage);
@@ -37,6 +41,15 @@ class SynchronousMailer extends StorableMessagesMailer
 
         $this->scheduleProcessedMessage($processedMessage);
         $this->storeProcessedMessage($processedMessage);
+
+        return $processedMessage;
+    }
+
+    public function resendMessage(StorableOutboundMessageStatus $messageStatus)
+    {
+        $processedMessage = $this->processMessageToResend($messageStatus->getStorableOutboundMessage());
+
+        $this->resendProcessedMessage($processedMessage, $messageStatus);
 
         return $processedMessage;
     }

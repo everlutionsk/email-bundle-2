@@ -23,6 +23,8 @@ interface MailSystem
      */
     public function scheduleMessage(UniqueOutboundMessage $uniqueMessage, DateTime $sendAt);
 
+    public function resendMessage(UniqueOutboundMessage $uniqueMessage);
+
     /**
      * @return string
      */
