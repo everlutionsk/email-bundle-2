@@ -30,12 +30,11 @@ class StorableOutboundMessageStatus extends BaseRepository
     /**
      * @return array
      */
-    public function findAllUndeliveredMessages()
+    public function findAllRejected()
     {
         return $this
             ->createQueryBuilder('i')
-            ->where('i.status = :status')
-            ->setParameter('status', 'failure')
+            ->where('i.rejectReason IS NOT NULL')
             ->getQuery()
             ->getResult();
     }

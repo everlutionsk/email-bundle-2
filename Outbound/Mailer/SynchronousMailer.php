@@ -21,7 +21,6 @@ class SynchronousMailer extends StorableMessagesMailer
     public function sendMessage(OutboundMessage $message)
     {
         $processedMessage = $this->processMessage($message);
-        dump($processedMessage);exit;
 
         $this->sendProcessedMessage($processedMessage);
         $this->storeProcessedMessage($processedMessage);
@@ -45,11 +44,16 @@ class SynchronousMailer extends StorableMessagesMailer
         return $processedMessage;
     }
 
+    /**
+     * @param StorableOutboundMessageStatus $messageStatus
+     * @return ProcessedOutboundMessage
+     * @throws MailSystemException
+     */
     public function resendMessage(StorableOutboundMessageStatus $messageStatus)
     {
         $processedMessage = $this->processMessageToResend($messageStatus->getStorableOutboundMessage());
 
-        $this->resendProcessedMessage($processedMessage, $messageStatus);
+        $this->resendProcessedMessage($processedMessage);
 
         return $processedMessage;
     }

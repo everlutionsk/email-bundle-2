@@ -86,6 +86,11 @@ abstract class StorableMessagesMailer extends Mailer
         $this->entityManager->flush();
     }
 
+    /**
+     * @param MailSystemResult $result
+     *
+     * @param ProcessedOutboundMessage $processedMessage
+     */
     protected function updateMailSystemResult(MailSystemResult $result, ProcessedOutboundMessage $processedMessage)
     {
         $storableMessage = $processedMessage->getStorableMessage();

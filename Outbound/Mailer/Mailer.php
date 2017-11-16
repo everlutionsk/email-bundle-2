@@ -104,7 +104,8 @@ abstract class Mailer implements MailerInterface
         return (new OutboundMessage())
             ->setSubject($outboundMessage->getSubject())
             ->setHtml($outboundMessage->getHtml())
-            ->setRecipients($outboundMessage->getRecipients());
+            ->setRecipients($outboundMessage->getRecipients())
+            ->setCustomHeaders($outboundMessage->getCustomHeaders());
     }
 
     /**
@@ -131,9 +132,9 @@ abstract class Mailer implements MailerInterface
 
     /**
      * @param ProcessedOutboundMessage $processedMessage
-     * @param StorableOutboundMessageStatus $messageStatus
+     * @throws MailSystemException
      */
-    protected function resendProcessedMessage(ProcessedOutboundMessage $processedMessage, StorableOutboundMessageStatus $messageStatus)
+    protected function resendProcessedMessage(ProcessedOutboundMessage $processedMessage)
     {
         $result = $this->mailSystem->resendMessage($processedMessage->getUniqueOutboundMessage());
 
@@ -151,5 +152,4 @@ abstract class Mailer implements MailerInterface
      * @param ProcessedOutboundMessage $processedMessage
      */
     abstract protected function updateMailSystemResult(MailSystemResult $result, ProcessedOutboundMessage $processedMessage);
-
 }
