@@ -10,7 +10,8 @@ use Everlution\EmailBundle\Message\Recipient\Recipient;
 /**
  * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageStatus")
  * @ORM\Table(name="email_outbound_message_status", indexes={
- *          @ORM\Index(columns={"email_outbound_id"})
+ *          @ORM\Index(name="search", columns={"email_outbound_id"}),
+ *          @ORM\Index(name="reject_reason", columns={"reject_reason"})
  *      })
  * @ORM\HasLifecycleCallbacks
  */

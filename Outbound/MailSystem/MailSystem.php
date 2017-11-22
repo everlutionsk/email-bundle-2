@@ -24,6 +24,13 @@ interface MailSystem
     public function scheduleMessage(UniqueOutboundMessage $uniqueMessage, DateTime $sendAt);
 
     /**
+     * @param UniqueOutboundMessage $uniqueMessage
+     * @return MailSystemResult
+     * @throws MailSystemException
+     */
+    public function resendMessage(UniqueOutboundMessage $uniqueMessage);
+
+    /**
      * @return string
      */
     public function getMailSystemName();
