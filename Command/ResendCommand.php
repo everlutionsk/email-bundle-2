@@ -12,7 +12,7 @@ class ResendCommand extends ContainerAwareCommand
 {
     public const NAME_LIMIT = 'limit';
     public const SHORTCUT_L = 'l';
-    public const DEFAULT_LIMIT = 10;
+    public const DEFAULT_LIMIT = 100;
 
     /**
      * @var MailerInterface
