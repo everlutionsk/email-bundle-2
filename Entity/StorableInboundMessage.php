@@ -13,7 +13,7 @@ use Everlution\EmailBundle\Message\Recipient\Recipient;
 /**
  * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableInboundMessage")
  * @ORM\Table(name="email_inbound", indexes={
- *          @ORM\Index(name="message_idx", columns={"message_id"})
+ *          @ORM\Index(columns={"message_id"})
  *      })
  */
 class StorableInboundMessage implements ReplyableMessage

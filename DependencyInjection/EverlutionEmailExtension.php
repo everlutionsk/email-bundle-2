@@ -65,9 +65,10 @@ class EverlutionEmailExtension extends Extension
         if (isset($processedConfig['message_id_generator'])) {
             $container->setAlias($serviceName, $processedConfig['message_id_generator']);
         } else {
-            $definition = new Definition('Everlution\EmailBundle\Support\MessageId\UuidBasedGenerator', [
-                'domainName' => $processedConfig['domain_name']
-            ]);
+            $definition = new Definition(
+                'Everlution\EmailBundle\Support\MessageId\UuidBasedGenerator',
+                [$processedConfig['domain_name']]
+            );
 
             $container->setDefinition($serviceName, $definition);
         }

@@ -15,7 +15,7 @@ use Everlution\EmailBundle\Relationship\ReplyableMessage;
 /**
  * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableOutboundMessage")
  * @ORM\Table(name="email_outbound",indexes={
- *          @ORM\Index(name="message_idx", columns={"message_id"})
+ *          @ORM\Index(columns={"message_id"})
  *      })
  */
 class StorableOutboundMessage implements ReplyableMessage

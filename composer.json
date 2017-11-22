@@ -1,7 +1,6 @@
 {
   "name": "everlutionsk/email-bundle-2",
   "license": "MIT",
-  "version": "1.2.4",
   "description": "Everlution email bundle for Symfony framework",
   "type": "everlution-bundle",
   "keywords": ["email", "symfony", "everlution", "bundle"],
@@ -14,9 +13,9 @@
   "require": {
     "php": ">=5.4.0",
     "doctrine/orm": "^2.3",
-    "symfony/http-kernel": "^2.6 || ~3.0",
-    "symfony/config": "^2.6 || ~3.0",
-    "symfony/dependency-injection": "^2.6 || ~3.0"
+    "symfony/http-kernel": "^2.6 || ~3.0 || ~4.0",
+    "symfony/config": "^2.6 || ~3.0 || ~4.0",
+    "symfony/dependency-injection": "^2.6 || ~3.0 || ~4.0"
   },
   "autoload": {
     "psr-0": { "Everlution\\EmailBundle": "" }
