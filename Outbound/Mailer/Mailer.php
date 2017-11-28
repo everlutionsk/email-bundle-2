@@ -115,7 +115,7 @@ abstract class Mailer implements MailerInterface
     protected function sendProcessedMessage(ProcessedOutboundMessage $processedMessage)
     {
         $result = $this->mailSystem->sendMessage($processedMessage->getUniqueOutboundMessage());
-        $this->updateMailSystemResult($result, $processedMessage);
+        $this->handleMailSystemResult($result, $processedMessage);
     }
 
     /**
