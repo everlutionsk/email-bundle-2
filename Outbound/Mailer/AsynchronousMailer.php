@@ -68,9 +68,14 @@ class AsynchronousMailer extends StorableMessagesMailer
         return $processedMessage;
     }
 
+    /**
+     * @param StorableOutboundMessageStatus $messageStatus
+     *
+     * @throws \ResendAsynchronouslyException
+     */
     public function resendMessage(StorableOutboundMessageStatus $messageStatus)
     {
-        // @todo implement
+        throw new \ResendAsynchronouslyException();
     }
 
     /**
