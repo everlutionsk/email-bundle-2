@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Everlution\EmailBundle\Outbound\Mailer\Exception;
+
 /**
  * Class ResendAsynchronouslyException
  *
