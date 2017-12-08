@@ -6,7 +6,6 @@ use Everlution\EmailBundle\Entity\StorableOutboundMessageStatus as Entity;
 
 class StorableOutboundMessageStatus extends BaseRepository
 {
-
     /**
      * @param string $mailSystemMessageId
      * @param string $mailSystemName
@@ -27,4 +26,22 @@ class StorableOutboundMessageStatus extends BaseRepository
         return $qb->getQuery()->getSingleResult();
     }
 
+    /**
+     * @param int $limit
+     * @param int $maxResendAttempts
+     *
+     * @return array
+     */
+    public function findAllRejected(int $limit, int $maxResendAttempts)
+    {
+        return $this
+            ->createQueryBuilder('i')
+            ->join('i.storableOutboundMessage', 'm')
+            ->where('i.rejectReason IS NOT NULL')
+            ->andWhere('m.resendAttempts < :resendAttempts')
+            ->setParameter('resendAttempts', $maxResendAttempts)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

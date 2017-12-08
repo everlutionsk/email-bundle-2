@@ -38,6 +38,16 @@ class MailSystem implements MailSystemInterface
 
     /**
      * @param UniqueOutboundMessage $uniqueMessage
+     * @return MailSystemResult
+     * @throws MailSystemException
+     */
+    public function resendMessage(UniqueOutboundMessage $uniqueMessage)
+    {
+        return $this->mockResult($uniqueMessage, 'resent');
+    }
+
+    /**
+     * @param UniqueOutboundMessage $uniqueMessage
      * @param string $status
      * @return MailSystemResultMock
      */

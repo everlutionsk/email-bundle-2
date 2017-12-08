@@ -4,6 +4,7 @@ namespace Everlution\EmailBundle\Outbound\Mailer;
 
 use DateTime;
 use Everlution\EmailBundle\Entity\StorableOutboundMessage;
+use Everlution\EmailBundle\Entity\StorableOutboundMessageStatus;
 use Everlution\EmailBundle\Outbound\Message\UniqueOutboundMessage;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystem;
 use Everlution\EmailBundle\Outbound\Message\OutboundMessage;
@@ -59,6 +60,20 @@ abstract class Mailer implements MailerInterface
     }
 
     /**
+     * @param StorableOutboundMessage $storableMessage
+     *
+     * @return ProcessedOutboundMessage
+     */
+    protected function processMessageToResend(StorableOutboundMessage $storableMessage)
+    {
+        $message = $this->convertToOutboundMessage($storableMessage);
+        $this->transformMessage($message);
+        $uniqueMessage = new UniqueOutboundMessage($storableMessage->getMessageId(), $message);
+
+        return new ProcessedOutboundMessage($uniqueMessage, $storableMessage);
+    }
+
+    /**
      * @param OutboundMessage $message
      */
     protected function transformMessage(OutboundMessage $message)
@@ -77,6 +92,20 @@ abstract class Mailer implements MailerInterface
         $newMessageId = $this->messageIdGenerator->generate();
 
         return new UniqueOutboundMessage($newMessageId, $message);
+    }
+
+    /**
+     * @param StorableOutboundMessage $outboundMessage
+     *
+     * @return OutboundMessage
+     */
+    protected function convertToOutboundMessage(StorableOutboundMessage $outboundMessage)
+    {
+        return (new OutboundMessage())
+            ->setSubject($outboundMessage->getSubject())
+            ->setHtml($outboundMessage->getHtml())
+            ->setRecipients($outboundMessage->getRecipients())
+            ->setCustomHeaders($outboundMessage->getCustomHeaders());
     }
 
     /**
@@ -102,9 +131,25 @@ abstract class Mailer implements MailerInterface
     }
 
     /**
+     * @param ProcessedOutboundMessage $processedMessage
+     * @throws MailSystemException
+     */
+    protected function resendProcessedMessage(ProcessedOutboundMessage $processedMessage)
+    {
+        $result = $this->mailSystem->resendMessage($processedMessage->getUniqueOutboundMessage());
+
+        $this->updateMailSystemResult($result, $processedMessage);
+    }
+
+    /**
      * @param MailSystemResult $result
      * @param ProcessedOutboundMessage $processedMessage
      */
     abstract protected function handleMailSystemResult(MailSystemResult $result, ProcessedOutboundMessage $processedMessage);
 
+    /**
+     * @param MailSystemResult $result
+     * @param ProcessedOutboundMessage $processedMessage
+     */
+    abstract protected function updateMailSystemResult(MailSystemResult $result, ProcessedOutboundMessage $processedMessage);
 }

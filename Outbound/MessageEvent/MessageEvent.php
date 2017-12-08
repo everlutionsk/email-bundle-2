@@ -14,6 +14,9 @@ class MessageEvent
     /** @var string */
     protected $reject_reason;
 
+    /** @var bool */
+    protected $rejected;
+
     /** @var string */
     protected $mailSystemName;
 
@@ -28,6 +31,7 @@ class MessageEvent
         $this->mailSystemMessageId = $mailSystemMessageId;
         $this->status = $status;
         $this->reject_reason = $reject_reason;
+        $this->rejected = !empty($reject_reason);
         $this->mailSystemName = $mailSystemName;
     }
 
@@ -53,6 +57,14 @@ class MessageEvent
     public function getRejectReason()
     {
         return $this->reject_reason;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRejected()
+    {
+        return $this->rejected;
     }
 
     /**

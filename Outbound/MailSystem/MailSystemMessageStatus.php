@@ -13,6 +13,9 @@ class MailSystemMessageStatus
     /** @var string */
     protected $status;
 
+    /** @var bool */
+    private $rejected;
+
     /** @var string */
     protected $rejectReason;
 
@@ -30,6 +33,7 @@ class MailSystemMessageStatus
         $this->mailSystemMessageId = $mailSystemMessageId;
         $this->status = $status;
         $this->rejectReason = $rejectReason;
+        $this->rejected = !empty($rejectReason);
         $this->recipient = $recipient;
     }
 
@@ -47,6 +51,14 @@ class MailSystemMessageStatus
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRejected()
+    {
+        return $this->rejected;
     }
 
     /**

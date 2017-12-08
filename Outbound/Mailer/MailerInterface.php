@@ -3,6 +3,7 @@
 namespace Everlution\EmailBundle\Outbound\Mailer;
 
 use DateTime;
+use Everlution\EmailBundle\Entity\StorableOutboundMessageStatus;
 use Everlution\EmailBundle\Outbound\Message\OutboundMessage;
 use Everlution\EmailBundle\Outbound\Message\ProcessedOutboundMessage;
 use Everlution\EmailBundle\Outbound\MailSystem\MailSystemException;
@@ -24,5 +25,7 @@ interface MailerInterface
      * @throws MailSystemException
      */
     public function scheduleMessage(OutboundMessage $message, DateTime $sendAt);
+
+    public function resendMessage(StorableOutboundMessageStatus $messageStatus);
 
 }

@@ -10,7 +10,8 @@ use Everlution\EmailBundle\Message\Recipient\Recipient;
 /**
  * @ORM\Entity(repositoryClass="Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageStatus")
  * @ORM\Table(name="email_outbound_message_status", indexes={
- *          @ORM\Index(columns={"email_outbound_id"})
+ *          @ORM\Index(name="search", columns={"email_outbound_id"}),
+ *          @ORM\Index(name="rejected", columns={"rejected"})
  *      })
  * @ORM\HasLifecycleCallbacks
  */
@@ -48,9 +49,16 @@ class StorableOutboundMessageStatus
     protected $status;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="rejected", type="boolean", options={"default": 0})
+     */
+    protected $rejected;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="reject_reason", type="string", length=512, nullable=true)
+     * @ORM\Column(name="reject_reason", type="text", nullable=true)
      */
     protected $rejectReason;
 
@@ -78,6 +86,7 @@ class StorableOutboundMessageStatus
 
         $this->mailSystemMessageId = $mailSystemMessageStatus->getMailSystemMessageId();
         $this->status = $mailSystemMessageStatus->getStatus();
+        $this->rejected = $mailSystemMessageStatus->isRejected();
         $this->rejectReason = $mailSystemMessageStatus->getRejectReason();
         $this->recipient = $mailSystemMessageStatus->getRecipient();
     }
@@ -122,6 +131,25 @@ class StorableOutboundMessageStatus
     public function setStatus($status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRejected()
+    {
+        return $this->rejected;
+    }
+
+    /**
+     * @param bool $rejected
+     * @return StorableOutboundMessageStatus
+     */
+    public function setRejected(bool $rejected)
+    {
+        $this->rejected = $rejected;
 
         return $this;
     }
