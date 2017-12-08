@@ -34,6 +34,7 @@ class MessageEventProcessor
 
         $storableMessageStatus->setStatus($messageEvent->getStatus());
         $storableMessageStatus->setRejectReason($messageEvent->getRejectReason());
+        $storableMessageStatus->setRejected($messageEvent->isRejected());
 
         $this->messageStatusRepository->save($storableMessageStatus);
     }
