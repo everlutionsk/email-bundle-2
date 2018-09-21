@@ -17,6 +17,11 @@ class RecipientEnforcer implements OutboundMessageTransformer
      */
     public function __construct($enforcedDeliveryAddress = null)
     {
+        // in case it's an empty string
+        if (trim($enforcedDeliveryAddress) === '') {
+            $enforcedDeliveryAddress = null;
+        }
+        
         $this->enforcedDeliveryAddress = $enforcedDeliveryAddress;
     }
 
