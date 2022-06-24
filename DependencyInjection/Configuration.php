@@ -20,10 +20,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('everlution_email');
-
-        $rootNode
+        $treeBuilder = new TreeBuilder('everlution_email');
+        $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('domain_name')
                     ->isRequired()
