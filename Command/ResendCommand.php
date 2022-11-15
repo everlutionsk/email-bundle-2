@@ -2,13 +2,14 @@
 
 namespace Everlution\EmailBundle\Command;
 
-use Everlution\EmailBundle\Outbound\Mailer\MailerInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Everlution\EmailBundle\Outbound\Mailer\SynchronousMailer;
+use Everlution\EmailBundle\Entity\Repository\StorableOutboundMessageStatus;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ResendCommand extends ContainerAwareCommand
+class ResendCommand extends Command
 {
     private const NAME_LIMIT = 'limit';
     private const SHORTCUT_LIMIT = 'l';
@@ -18,9 +19,18 @@ class ResendCommand extends ContainerAwareCommand
     private const SHORTCUT_RESEND_ATTEMPTS = 'a';
     private const DEFAULT_MAX_RESEND_ATTEMPTS = 3;
 
+    private SynchronousMailer $mailer;
+    private StorableOutboundMessageStatus $repository;
+
+    public function __construct(SynchronousMailer $mailer, StorableOutboundMessageStatus $repository)
+    {
+        parent::__construct();
+        $this->mailer = $mailer;
+        $this->repository = $repository;
+    }
+
     /**
      * {@inheritdoc}
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     protected function configure()
     {
@@ -45,28 +55,18 @@ class ResendCommand extends ContainerAwareCommand
 
     /**
      * {@inheritdoc}
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
-     * @throws \LogicException
+     *
      * @throws \Everlution\EmailBundle\Outbound\MailSystem\MailSystemException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $mailer = $this
-            ->getContainer()
-            ->get('everlution.email.outbound.synchronous_mailer');
-
-        $items = $this
-            ->getContainer()
-            ->get('everlution.email.outbound.message_status_repository')
-            ->findAllRejected(
-                $input->getOption(self::NAME_LIMIT),
-                $input->getOption(self::NAME_RESEND_ATTEMPTS)
-            );
+        $items = $this->repository->findAllRejected(
+            $input->getOption(self::NAME_LIMIT),
+            $input->getOption(self::NAME_RESEND_ATTEMPTS)
+        );
 
         foreach ($items as $item) {
-            $mailer->resendMessage($item);
+            $this->mailer->resendMessage($item);
         }
     }
 }
